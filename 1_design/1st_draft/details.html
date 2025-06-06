@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>챌린지 룸</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#5271FF", secondary: "#FF7A5C" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+          font-family: 'Noto Sans KR', sans-serif;
+      }
+      .chat-container {
+          height: calc(100% - 60px);
+      }
+      .message-container {
+          max-height: 300px;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- 상단 네비게이션 바 -->
+    <nav class="bg-white shadow-md fixed w-full top-0 z-50">
+      <div class="flex items-center justify-between px-4 py-3">
+        <div class="flex items-center">
+          <button
+            onclick="history.back()"
+            class="w-8 h-8 flex items-center justify-center mr-2"
+          >
+            <i class="ri-arrow-left-s-line ri-lg"></i>
+          </button>
+          <h1 class="text-lg font-medium">챌린지 룸</h1>
+        </div>
+        <div class="flex items-center space-x-3">
+          <button class="w-8 h-8 flex items-center justify-center">
+            <i class="ri-share-line ri-lg"></i>
+          </button>
+          <button class="w-8 h-8 flex items-center justify-center">
+            <i class="ri-more-2-fill ri-lg"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 영역 -->
+    <main class="pt-14 pb-16 px-4">
+      <!-- 챌린지 정보 영역 -->
+      <section class="mt-4 mb-6">
+        <div class="flex items-start">
+          <button
+            id="calendarBtn"
+            class="w-14 h-14 bg-white shadow-md rounded-lg flex flex-col items-center justify-center mr-3 cursor-pointer"
+          >
+            <i class="ri-calendar-line ri-lg text-primary"></i>
+            <span class="text-xs mt-1">달력</span>
+          </button>
+          <div class="flex-1 bg-white shadow-md rounded-lg p-4">
+            <h2 class="text-lg font-bold text-primary">
+              주간 사진 챌린지: 여름의 색
+            </h2>
+            <p class="text-sm mt-2">
+              2025년 6월 3일 - 6월 9일까지 진행되는 이번 주 챌린지는 '여름의
+              색'입니다. 여러분의 일상에서 발견한 여름의 다양한 색감을 사진으로
+              담아보세요!
+            </p>
+            <div class="flex items-center mt-3">
+              <div class="flex -space-x-2">
+                <img
+                  src="https://readdy.ai/api/search-image?query=portrait%20of%20young%20Korean%20woman%2C%20simple%20background%2C%20professional%20headshot&width=50&height=50&seq=1&orientation=squarish"
+                  class="w-6 h-6 rounded-full border border-white"
+                  alt="참여자"
+                />
+                <img
+                  src="https://readdy.ai/api/search-image?query=portrait%20of%20young%20Korean%20man%2C%20simple%20background%2C%20professional%20headshot&width=50&height=50&seq=2&orientation=squarish"
+                  class="w-6 h-6 rounded-full border border-white"
+                  alt="참여자"
+                />
+                <img
+                  src="https://readdy.ai/api/search-image?query=portrait%20of%20middle-aged%20Korean%20woman%2C%20simple%20background%2C%20professional%20headshot&width=50&height=50&seq=3&orientation=squarish"
+                  class="w-6 h-6 rounded-full border border-white"
+                  alt="참여자"
+                />
+              </div>
+              <span class="text-xs ml-2">32명 참여 중</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 게시물 목록 영역 -->
+      <section class="mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-base font-medium">챌린지 게시물</h3>
+          <button class="text-sm text-primary flex items-center">
+            최신순 <i class="ri-arrow-down-s-line ml-1"></i>
+          </button>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="relative pb-[100%]">
+              <img
+                src="https://readdy.ai/api/search-image?query=vibrant%20blue%20ocean%20water%20with%20sunlight%20reflection%2C%20summer%20colors%2C%20high%20quality%20photography&width=180&height=180&seq=4&orientation=squarish"
+                class="absolute inset-0 w-full h-full object-cover"
+                alt="게시물"
+              />
+            </div>
+            <div class="p-2">
+              <div class="flex items-center">
+                <img
+                  src="https://readdy.ai/api/search-image?query=portrait%20of%20young%20Korean%20woman%2C%20simple%20background%2C%20professional%20headshot&width=30&height=30&seq=5&orientation=squarish"
+                  class="w-5 h-5 rounded-full mr-1"
+                  alt="프로필"
+                />
+                <span class="text-xs">김지현</span>
+              </div>
+              <p class="text-xs mt-1 line-clamp-2">
+                부산 해운대에서 찍은 여름 바다의 푸른색
+              </p>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="relative pb-[100%]">
+              <img
+                src="https://readdy.ai/api/search-image?query=bright%20yellow%20sunflower%20field%20under%20blue%20sky%2C%20summer%20colors%2C%20high%20quality%20photography&width=180&height=180&seq=6&orientation=squarish"
+                class="absolute inset-0 w-full h-full object-cover"
+                alt="게시물"
+              />
+            </div>
+            <div class="p-2">
+              <div class="flex items-center">
+                <img
+                  src="https://readdy.ai/api/search-image?query=portrait%20of%20young%20Korean%20man%2C%20simple%20background%2C%20professional%20headshot&width=30&height=30&seq=7&orientation=squarish"
+                  class="w-5 h-5 rounded-full mr-1"
+                  alt="프로필"
+                />
+                <span class="text-xs">박준호</span>
+              </div>
+              <p class="text-xs mt-1 line-clamp-2">
+                해바라기 밭에서 발견한 여름의 노란색
+              </p>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="relative pb-[100%]">
+              <img
+                src="https://readdy.ai/api/search-image?query=green%20lush%20tropical%20leaves%20with%20water%20drops%2C%20summer%20colors%2C%20high%20quality%20photography&width=180&height=180&seq=8&orientation=squarish"
+                class="absolute inset-0 w-full h-full object-cover"
+                alt="게시물"
+              />
+            </div>
+            <div class="p-2">
+              <div class="flex items-center">
+                <img
+                  src="https://readdy.ai/api/search-image?query=portrait%20of%20middle-aged%20Korean%20woman%2C%20simple%20background%2C%20professional%20headshot&width=30&height=30&seq=9&orientation=squarish"
+                  class="w-5 h-5 rounded-full mr-1"
+                  alt="프로필"
+                />
+                <span class="text-xs">이미영</span>
+              </div>
+              <p class="text-xs mt-1 line-clamp-2">
+                비 온 뒤 정원의 싱그러운 초록색
+              </p>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="relative pb-[100%]">
+              <img
+                src="https://readdy.ai/api/search-image?query=bright%20red%20watermelon%20slices%20on%20white%20plate%2C%20summer%20colors%2C%20high%20quality%20food%20photography&width=180&height=180&seq=10&orientation=squarish"
+                class="absolute inset-0 w-full h-full object-cover"
+                alt="게시물"
+              />
+            </div>
+            <div class="p-2">
+              <div class="flex items-center">
+                <img
+                  src="https://readdy.ai/api/search-image?query=portrait%20of%20young%20Korean%20man%20with%20glasses%2C%20simple%20background%2C%20professional%20headshot&width=30&height=30&seq=11&orientation=squarish"
+                  class="w-5 h-5 rounded-full mr-1"
+                  alt="프로필"
+                />
+                <span class="text-xs">최동현</span>
+              </div>
+              <p class="text-xs mt-1 line-clamp-2">
+                여름 과일 수박의 선명한 빨간색
+              </p>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="relative pb-[100%]">
+              <img
+                src="https://readdy.ai/api/search-image?query=pink%20sunset%20over%20beach%20with%20silhouette%20of%20palm%20trees%2C%20summer%20colors%2C%20high%20quality%20photography&width=180&height=180&seq=12&orientation=squarish"
+                class="absolute inset-0 w-full h-full object-cover"
+                alt="게시물"
+              />
+            </div>
+            <div class="p-2">
+              <div class="flex items-center">
+                <img
+                  src="https://readdy.ai/api/search-image?query=portrait%20of%20young%20Korean%20woman%20with%20long%20hair%2C%20simple%20background%2C%20professional%20headshot&width=30&height=30&seq=13&orientation=squarish"
+                  class="w-5 h-5 rounded-full mr-1"
+                  alt="프로필"
+                />
+                <span class="text-xs">정수연</span>
+              </div>
+              <p class="text-xs mt-1 line-clamp-2">제주도 일몰의 분홍빛 하늘</p>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="relative pb-[100%]">
+              <img
+                src="https://readdy.ai/api/search-image?query=purple%20lavender%20field%20in%20summer%2C%20vibrant%20colors%2C%20high%20quality%20photography&width=180&height=180&seq=14&orientation=squarish"
+                class="absolute inset-0 w-full h-full object-cover"
+                alt="게시물"
+              />
+            </div>
+            <div class="p-2">
+              <div class="flex items-center">
+                <img
+                  src="https://readdy.ai/api/search-image?query=portrait%20of%20middle-aged%20Korean%20man%2C%20simple%20background%2C%20professional%20headshot&width=30&height=30&seq=15&orientation=squarish"
+                  class="w-5 h-5 rounded-full mr-1"
+                  alt="프로필"
+                />
+                <span class="text-xs">강민석</span>
+              </div>
+              <p class="text-xs mt-1 line-clamp-2">
+                라벤더 농장에서 담은 보라색 여름
+              </p>
+            </div>
+          </div>
+        </div>
+        <button
+          class="w-full py-3 mt-4 text-sm text-primary border border-primary rounded-button cursor-pointer"
+        >
+          더 보기
+        </button>
+      </section>
+
+      <!-- 채팅 영역 -->
+      <section class="mb-16">
+        <div class="bg-white rounded-lg shadow-md p-4">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="text-base font-medium">채팅방</h3>
+            <span class="text-xs text-gray-500">32명 참여 중</span>
+          </div>
+          <div
+            id="messageContainer"
+            class="message-container overflow-y-auto mb-3"
+          >
+            <div class="flex mb-3">
+              <img
+                src="https://readdy.ai/api/search-image?query=portrait%20of%20young%20Korean%20woman%2C%20simple%20background%2C%20professional%20headshot&width=40&height=40&seq=16&orientation=squarish"
+                class="w-8 h-8 rounded-full mr-2"
+                alt="프로필"
+              />
+              <div>
+                <div class="flex items-center">
+                  <span class="text-xs font-medium">김지현</span>
+                  <span class="text-[10px] text-gray-500 ml-1">오전 10:23</span>
+                </div>
+                <p class="text-sm mt-1 bg-gray-100 rounded-lg p-2 inline-block">
+                  안녕하세요! 이번 챌린지 주제 너무 좋네요 😊
+                </p>
+              </div>
+            </div>
+            <div class="flex mb-3">
+              <img
+                src="https://readdy.ai/api/search-image?query=portrait%20of%20young%20Korean%20man%2C%20simple%20background%2C%20professional%20headshot&width=40&height=40&seq=17&orientation=squarish"
+                class="w-8 h-8 rounded-full mr-2"
+                alt="프로필"
+              />
+              <div>
+                <div class="flex items-center">
+                  <span class="text-xs font-medium">박준호</span>
+                  <span class="text-[10px] text-gray-500 ml-1">오전 10:25</span>
+                </div>
+                <p class="text-sm mt-1 bg-gray-100 rounded-lg p-2 inline-block">
+                  저도 그렇게 생각해요! 이번 주말에 촬영하러 나갈 계획이에요.
+                </p>
+              </div>
+            </div>
+            <div class="flex mb-3">
+              <img
+                src="https://readdy.ai/api/search-image?query=portrait%20of%20middle-aged%20Korean%20woman%2C%20simple%20background%2C%20professional%20headshot&width=40&height=40&seq=18&orientation=squarish"
+                class="w-8 h-8 rounded-full mr-2"
+                alt="프로필"
+              />
+              <div>
+                <div class="flex items-center">
+                  <span class="text-xs font-medium">이미영</span>
+                  <span class="text-[10px] text-gray-500 ml-1">오전 10:30</span>
+                </div>
+                <p class="text-sm mt-1 bg-gray-100 rounded-lg p-2 inline-block">
+                  혹시 여름 색감을 잘 표현할 수 있는 장소 추천 있으신가요?
+                </p>
+              </div>
+            </div>
+            <div class="flex mb-3">
+              <img
+                src="https://readdy.ai/api/search-image?query=portrait%20of%20young%20Korean%20man%20with%20glasses%2C%20simple%20background%2C%20professional%20headshot&width=40&height=40&seq=19&orientation=squarish"
+                class="w-8 h-8 rounded-full mr-2"
+                alt="프로필"
+              />
+              <div>
+                <div class="flex items-center">
+                  <span class="text-xs font-medium">최동현</span>
+                  <span class="text-[10px] text-gray-500 ml-1">오전 10:32</span>
+                </div>
+                <p class="text-sm mt-1 bg-gray-100 rounded-lg p-2 inline-block">
+                  한강공원이나 식물원 어떠세요? 요즘 꽃들이 만개해서 색감이 아주
+                  좋아요!
+                </p>
+              </div>
+            </div>
+            <div class="flex mb-3">
+              <img
+                src="https://readdy.ai/api/search-image?query=portrait%20of%20young%20Korean%20woman%20with%20long%20hair%2C%20simple%20background%2C%20professional%20headshot&width=40&height=40&seq=20&orientation=squarish"
+                class="w-8 h-8 rounded-full mr-2"
+                alt="프로필"
+              />
+              <div>
+                <div class="flex items-center">
+                  <span class="text-xs font-medium">정수연</span>
+                  <span class="text-[10px] text-gray-500 ml-1">오전 10:35</span>
+                </div>
+                <p class="text-sm mt-1 bg-gray-100 rounded-lg p-2 inline-block">
+                  저는 지난주에 올린 사진이 해변에서 찍은 건데, 바다도 여름 색감
+                  표현하기 좋아요~
+                </p>
+              </div>
+            </div>
+            <div class="flex mb-3">
+              <img
+                src="https://readdy.ai/api/search-image?query=portrait%20of%20middle-aged%20Korean%20woman%2C%20simple%20background%2C%20professional%20headshot&width=40&height=40&seq=21&orientation=squarish"
+                class="w-8 h-8 rounded-full mr-2"
+                alt="프로필"
+              />
+              <div>
+                <div class="flex items-center">
+                  <span class="text-xs font-medium">이미영</span>
+                  <span class="text-[10px] text-gray-500 ml-1">오전 10:38</span>
+                </div>
+                <p class="text-sm mt-1 bg-gray-100 rounded-lg p-2 inline-block">
+                  좋은 제안 감사합니다! 이번 주말에 한번 가봐야겠어요 😊
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <input
+              type="text"
+              id="messageInput"
+              placeholder="메시지를 입력하세요..."
+              class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
+            />
+            <button
+              id="sendBtn"
+              class="ml-2 bg-primary text-white rounded-full w-9 h-9 flex items-center justify-center cursor-pointer"
+            >
+              <i class="ri-send-plane-fill"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 달력 모달 -->
+    <div
+      id="calendarModal"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center"
+    >
+      <div class="bg-white rounded-lg w-[90%] max-h-[80%] overflow-y-auto">
+        <div class="p-4 border-b">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-medium">챌린지 달력</h3>
+            <button
+              id="closeModalBtn"
+              class="w-8 h-8 flex items-center justify-center cursor-pointer"
+            >
+              <i class="ri-close-line ri-lg"></i>
+            </button>
+          </div>
+        </div>
+        <div class="p-4">
+          <div class="flex justify-between items-center mb-4">
+            <button
+              class="w-8 h-8 flex items-center justify-center cursor-pointer"
+            >
+              <i class="ri-arrow-left-s-line"></i>
+            </button>
+            <h4 class="text-base font-medium">2025년 6월</h4>
+            <button
+              class="w-8 h-8 flex items-center justify-center cursor-pointer"
+            >
+              <i class="ri-arrow-right-s-line"></i>
+            </button>
+          </div>
+          <div class="grid grid-cols-7 gap-1 text-center mb-2">
+            <span class="text-xs text-gray-500">일</span>
+            <span class="text-xs text-gray-500">월</span>
+            <span class="text-xs text-gray-500">화</span>
+            <span class="text-xs text-gray-500">수</span>
+            <span class="text-xs text-gray-500">목</span>
+            <span class="text-xs text-gray-500">금</span>
+            <span class="text-xs text-gray-500">토</span>
+          </div>
+          <div class="grid grid-cols-7 gap-1">
+            <div
+              class="h-12 flex items-center justify-center text-gray-400 text-sm"
+            >
+              26
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-gray-400 text-sm"
+            >
+              27
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-gray-400 text-sm"
+            >
+              28
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-gray-400 text-sm"
+            >
+              29
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-gray-400 text-sm"
+            >
+              30
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-gray-400 text-sm"
+            >
+              31
+            </div>
+            <div class="h-12 flex items-center justify-center text-sm">1</div>
+            <div class="h-12 flex items-center justify-center text-sm">2</div>
+            <div
+              class="h-12 flex items-center justify-center text-sm bg-gray-100 rounded-lg"
+            >
+              <div class="relative">
+                3
+                <div
+                  class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full"
+                ></div>
+              </div>
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-sm bg-gray-100 rounded-lg"
+            >
+              <div class="relative">
+                4
+                <div
+                  class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full"
+                ></div>
+              </div>
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-sm bg-gray-100 rounded-lg"
+            >
+              <div class="relative">
+                5
+                <div
+                  class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full"
+                ></div>
+              </div>
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-sm bg-gray-100 rounded-lg"
+            >
+              <div class="relative">
+                6
+                <div
+                  class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full"
+                ></div>
+              </div>
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-sm bg-primary text-white rounded-lg"
+            >
+              7
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-sm bg-gray-100 rounded-lg"
+            >
+              <div class="relative">
+                8
+                <div
+                  class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full"
+                ></div>
+              </div>
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-sm bg-gray-100 rounded-lg"
+            >
+              <div class="relative">
+                9
+                <div
+                  class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full"
+                ></div>
+              </div>
+            </div>
+            <div class="h-12 flex items-center justify-center text-sm">10</div>
+            <div class="h-12 flex items-center justify-center text-sm">11</div>
+            <div class="h-12 flex items-center justify-center text-sm">12</div>
+            <div class="h-12 flex items-center justify-center text-sm">13</div>
+            <div class="h-12 flex items-center justify-center text-sm">14</div>
+            <div class="h-12 flex items-center justify-center text-sm">15</div>
+            <div class="h-12 flex items-center justify-center text-sm">16</div>
+            <div class="h-12 flex items-center justify-center text-sm">17</div>
+            <div class="h-12 flex items-center justify-center text-sm">18</div>
+            <div class="h-12 flex items-center justify-center text-sm">19</div>
+            <div class="h-12 flex items-center justify-center text-sm">20</div>
+            <div class="h-12 flex items-center justify-center text-sm">21</div>
+            <div class="h-12 flex items-center justify-center text-sm">22</div>
+            <div class="h-12 flex items-center justify-center text-sm">23</div>
+            <div class="h-12 flex items-center justify-center text-sm">24</div>
+            <div class="h-12 flex items-center justify-center text-sm">25</div>
+            <div class="h-12 flex items-center justify-center text-sm">26</div>
+            <div class="h-12 flex items-center justify-center text-sm">27</div>
+            <div class="h-12 flex items-center justify-center text-sm">28</div>
+            <div class="h-12 flex items-center justify-center text-sm">29</div>
+            <div class="h-12 flex items-center justify-center text-sm">30</div>
+            <div
+              class="h-12 flex items-center justify-center text-gray-400 text-sm"
+            >
+              1
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-gray-400 text-sm"
+            >
+              2
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-gray-400 text-sm"
+            >
+              3
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-gray-400 text-sm"
+            >
+              4
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-gray-400 text-sm"
+            >
+              5
+            </div>
+            <div
+              class="h-12 flex items-center justify-center text-gray-400 text-sm"
+            >
+              6
+            </div>
+          </div>
+          <div class="mt-4 border-t pt-4">
+            <h4 class="text-base font-medium mb-3">이전 챌린지</h4>
+            <div class="space-y-3">
+              <div class="p-3 bg-gray-50 rounded-lg">
+                <div class="flex justify-between items-center">
+                  <h5 class="text-sm font-medium">봄꽃 사진 챌린지</h5>
+                  <span class="text-xs text-gray-500">5월 27일 - 6월 2일</span>
+                </div>
+                <p class="text-xs mt-1 text-gray-600">
+                  봄의 마지막 꽃들을 담아보세요
+                </p>
+                <div class="flex mt-2 overflow-x-auto pb-1">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=cherry%20blossoms%20in%20spring%2C%20high%20quality%20photography&width=80&height=80&seq=22&orientation=squarish"
+                    class="w-14 h-14 rounded-md mr-2 flex-shrink-0"
+                    alt="챌린지 사진"
+                  />
+                  <img
+                    src="https://readdy.ai/api/search-image?query=tulips%20in%20garden%2C%20spring%20flowers%2C%20high%20quality%20photography&width=80&height=80&seq=23&orientation=squarish"
+                    class="w-14 h-14 rounded-md mr-2 flex-shrink-0"
+                    alt="챌린지 사진"
+                  />
+                  <img
+                    src="https://readdy.ai/api/search-image?query=magnolia%20flowers%20on%20tree%2C%20spring%2C%20high%20quality%20photography&width=80&height=80&seq=24&orientation=squarish"
+                    class="w-14 h-14 rounded-md mr-2 flex-shrink-0"
+                    alt="챌린지 사진"
+                  />
+                  <img
+                    src="https://readdy.ai/api/search-image?query=forsythia%20yellow%20flowers%2C%20spring%2C%20high%20quality%20photography&width=80&height=80&seq=25&orientation=squarish"
+                    class="w-14 h-14 rounded-md flex-shrink-0"
+                    alt="챌린지 사진"
+                  />
+                </div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded-lg">
+                <div class="flex justify-between items-center">
+                  <h5 class="text-sm font-medium">일상 속 그림자 챌린지</h5>
+                  <span class="text-xs text-gray-500">5월 20일 - 5월 26일</span>
+                </div>
+                <p class="text-xs mt-1 text-gray-600">
+                  일상에서 발견한 독특한 그림자를 찾아보세요
+                </p>
+                <div class="flex mt-2 overflow-x-auto pb-1">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=shadow%20of%20leaves%20on%20wall%2C%20artistic%2C%20high%20quality%20photography&width=80&height=80&seq=26&orientation=squarish"
+                    class="w-14 h-14 rounded-md mr-2 flex-shrink-0"
+                    alt="챌린지 사진"
+                  />
+                  <img
+                    src="https://readdy.ai/api/search-image?query=shadow%20of%20person%20on%20street%2C%20sunset%2C%20high%20quality%20photography&width=80&height=80&seq=27&orientation=squarish"
+                    class="w-14 h-14 rounded-md mr-2 flex-shrink-0"
+                    alt="챌린지 사진"
+                  />
+                  <img
+                    src="https://readdy.ai/api/search-image?query=shadow%20patterns%20through%20window%20blinds%2C%20high%20quality%20photography&width=80&height=80&seq=28&orientation=squarish"
+                    class="w-14 h-14 rounded-md mr-2 flex-shrink-0"
+                    alt="챌린지 사진"
+                  />
+                  <img
+                    src="https://readdy.ai/api/search-image?query=shadow%20of%20fence%20on%20ground%2C%20geometric%20patterns%2C%20high%20quality%20photography&width=80&height=80&seq=29&orientation=squarish"
+                    class="w-14 h-14 rounded-md flex-shrink-0"
+                    alt="챌린지 사진"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 하단 탭바 -->
+    <nav class="bg-white shadow-lg fixed w-full bottom-0 z-50">
+      <div class="grid grid-cols-5 py-2">
+        <a
+          href="#"
+          class="flex flex-col items-center justify-center cursor-pointer"
+        >
+          <div class="w-6 h-6 flex items-center justify-center">
+            <i class="ri-home-line ri-lg"></i>
+          </div>
+          <span class="text-[10px] mt-1">홈</span>
+        </a>
+        <a
+          href="#"
+          class="flex flex-col items-center justify-center cursor-pointer"
+        >
+          <div class="w-6 h-6 flex items-center justify-center">
+            <i class="ri-search-line ri-lg"></i>
+          </div>
+          <span class="text-[10px] mt-1">검색</span>
+        </a>
+        <a
+          href="#"
+          class="flex flex-col items-center justify-center cursor-pointer"
+        >
+          <div class="w-6 h-6 flex items-center justify-center">
+            <i class="ri-add-circle-line ri-lg text-primary"></i>
+          </div>
+          <span class="text-[10px] mt-1 text-primary">게시</span>
+        </a>
+        <a
+          href="#"
+          class="flex flex-col items-center justify-center cursor-pointer"
+        >
+          <div class="w-6 h-6 flex items-center justify-center">
+            <i class="ri-team-line ri-lg"></i>
+          </div>
+          <span class="text-[10px] mt-1">챌린지</span>
+        </a>
+        <a
+          href="#"
+          class="flex flex-col items-center justify-center cursor-pointer"
+        >
+          <div class="w-6 h-6 flex items-center justify-center">
+            <i class="ri-user-line ri-lg"></i>
+          </div>
+          <span class="text-[10px] mt-1">프로필</span>
+        </a>
+      </div>
+    </nav>
+
+    <script id="calendarModalScript">
+      document.addEventListener("DOMContentLoaded", function () {
+        const calendarBtn = document.getElementById("calendarBtn");
+        const calendarModal = document.getElementById("calendarModal");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+
+        calendarBtn.addEventListener("click", function () {
+          calendarModal.classList.remove("hidden");
+          document.body.style.overflow = "hidden";
+        });
+
+        closeModalBtn.addEventListener("click", function () {
+          calendarModal.classList.add("hidden");
+          document.body.style.overflow = "auto";
+        });
+
+        calendarModal.addEventListener("click", function (e) {
+          if (e.target === calendarModal) {
+            calendarModal.classList.add("hidden");
+            document.body.style.overflow = "auto";
+          }
+        });
+      });
+    </script>
+
+    <script id="chatScript">
+      document.addEventListener("DOMContentLoaded", function () {
+        const messageInput = document.getElementById("messageInput");
+        const sendBtn = document.getElementById("sendBtn");
+        const messageContainer = document.getElementById("messageContainer");
+
+        function sendMessage() {
+          const message = messageInput.value.trim();
+          if (message) {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const timeString = `${hours < 12 ? "오전" : "오후"} ${hours % 12 || 12}:${minutes < 10 ? "0" + minutes : minutes}`;
+
+            const messageHTML = `
+                              <div class="flex mb-3 justify-end">
+                                  <div class="text-right">
+                                      <div class="flex items-center justify-end">
+                                          <span class="text-[10px] text-gray-500 mr-1">${timeString}</span>
+                                          <span class="text-xs font-medium">나</span>
+                                      </div>
+                                      <p class="text-sm mt-1 bg-primary text-white rounded-lg p-2 inline-block">${message}</p>
+                                  </div>
+                              </div>
+                          `;
+
+            messageContainer.insertAdjacentHTML("beforeend", messageHTML);
+            messageInput.value = "";
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+          }
+        }
+
+        sendBtn.addEventListener("click", sendMessage);
+
+        messageInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        });
+
+        // 초기 스크롤 위치 설정
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+      });
+    </script>
+  </body>
+</html>
+

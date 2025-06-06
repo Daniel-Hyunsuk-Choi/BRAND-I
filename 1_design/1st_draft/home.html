@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>인스타그램 스타일 검색</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#E1306C", secondary: "#833AB4" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+          font-family: 'Noto Sans KR', sans-serif;
+      }
+      .hashtag {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+      }
+      .category-scroll::-webkit-scrollbar {
+          display: none;
+      }
+      .image-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 2px;
+      }
+      .image-container {
+          position: relative;
+          padding-bottom: 100%;
+          overflow: hidden;
+      }
+      .image-container img {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+      }
+      .shimmer {
+          background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+          background-size: 200% 100%;
+          animation: shimmer 1.5s infinite;
+      }
+      @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+      }
+    </style>
+  </head>
+  <body class="bg-white">
+    <!-- 상단 네비게이션 -->
+    <nav class="fixed top-0 w-full bg-white z-50 shadow-sm">
+      <div class="flex items-center justify-between px-4 py-3 border-b">
+        <div class="font-['Pacifico'] text-xl text-primary">logo</div>
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 flex items-center justify-center">
+            <i class="ri-search-line ri-lg"></i>
+          </div>
+          <div class="w-8 h-8 flex items-center justify-center">
+            <i class="ri-heart-line ri-lg"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카테고리 버튼 영역 -->
+      <div
+        class="category-scroll flex items-center overflow-x-auto py-3 px-4 space-x-2 whitespace-nowrap"
+      >
+        <button
+          class="px-4 py-1.5 bg-primary text-white rounded-full text-sm font-medium"
+        >
+          전체
+        </button>
+        <button
+          class="px-4 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
+        >
+          인기
+        </button>
+        <button
+          class="px-4 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
+        >
+          패션
+        </button>
+        <button
+          class="px-4 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
+        >
+          뷰티
+        </button>
+        <button
+          class="px-4 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
+        >
+          여행
+        </button>
+        <button
+          class="px-4 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
+        >
+          음식
+        </button>
+        <button
+          class="px-4 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
+        >
+          스포츠
+        </button>
+        <button
+          class="px-4 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
+        >
+          예술
+        </button>
+        <button
+          class="px-4 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
+        >
+          동물
+        </button>
+      </div>
+    </nav>
+
+    <!-- 메인 콘텐츠 -->
+    <main class="pt-28 pb-16">
+      <div class="image-grid" id="imageGrid">
+        <!-- 이미지 및 해시태그는 JS로 동적 생성 -->
+      </div>
+
+      <!-- 로딩 표시기 -->
+      <div id="loadingIndicator" class="flex justify-center items-center py-6">
+        <div class="w-8 h-8 flex items-center justify-center">
+          <i class="ri-loader-4-line ri-spin ri-2x text-primary"></i>
+        </div>
+      </div>
+    </main>
+
+    <!-- 하단 탭바 -->
+    <div class="fixed bottom-0 w-full bg-white border-t z-50">
+      <div class="grid grid-cols-5 h-14">
+        <div class="flex flex-col items-center justify-center">
+          <div class="w-6 h-6 flex items-center justify-center">
+            <i class="ri-home-line ri-lg"></i>
+          </div>
+          <span class="text-xs mt-1">홈</span>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+          <div class="w-6 h-6 flex items-center justify-center">
+            <i class="ri-compass-3-line ri-lg text-primary"></i>
+          </div>
+          <span class="text-xs mt-1 text-primary">탐색</span>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+          <div class="w-6 h-6 flex items-center justify-center">
+            <i class="ri-add-box-line ri-lg"></i>
+          </div>
+          <span class="text-xs mt-1">만들기</span>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+          <div class="w-6 h-6 flex items-center justify-center">
+            <i class="ri-movie-line ri-lg"></i>
+          </div>
+          <span class="text-xs mt-1">릴스</span>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+          <div
+            class="w-6 h-6 flex items-center justify-center rounded-full overflow-hidden"
+          >
+            <img
+              src="https://readdy.ai/api/search-image?query=portrait%20of%20a%20Korean%20young%20woman%2C%20minimalist%2C%20simple%20background%2C%20professional%20profile%20photo&width=100&height=100&seq=profile1&orientation=squarish"
+              alt="프로필"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <span class="text-xs mt-1">프로필</span>
+        </div>
+      </div>
+    </div>
+
+    <script id="imageDataScript">
+      // 이미지 및 해시태그 데이터
+      const imageData = [
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20street%20fashion%2C%20trendy%20outfit%2C%20Seoul%20street%20style%2C%20vibrant%20colors%2C%20high%20quality%20photography%2C%20urban%20background%2C%20fashion%20photography&width=400&height=400&seq=img1&orientation=squarish",
+          hashtags: "#패션아 모여라",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20cafe%20interior%2C%20aesthetic%20coffee%20shop%2C%20minimalist%20design%2C%20warm%20lighting%2C%20cozy%20atmosphere%2C%20Seoul%20cafe%20culture&width=400&height=400&seq=img2&orientation=squarish",
+          hashtags: "# 카페 투어 방",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20food%2C%20traditional%20bibimbap%2C%20colorful%20ingredients%2C%20overhead%20shot%2C%20food%20photography%2C%20restaurant%20setting&width=400&height=400&seq=img3&orientation=squarish",
+          hashtags: "#맛스타그램 #먹스타그램 #비빔밥 #한식 #맛집추천 #푸드스타그램",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Jeju%20Island%20landscape%2C%20volcanic%20rocks%2C%20blue%20ocean%2C%20natural%20scenery%2C%20travel%20photography%2C%20clear%20sky&width=400&height=400&seq=img4&orientation=squarish",
+          hashtags: "#제주도여행 #여행스타그램 #국내여행 #힐링 #바다 #여행에미치다",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20makeup%20products%2C%20beauty%20flatlay%2C%20cosmetics%20arrangement%2C%20pastel%20colors%2C%20skincare%20routine&width=400&height=400&seq=img5&orientation=squarish",
+          hashtags: "#뷰티스타그램 #화장품 #스킨케어 #뷰티 #코덕 #메이크업",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20workout%20outfit%2C%20fitness%20fashion%2C%20gym%20wear%2C%20athletic%20style%2C%20modern%20gym%20interior&width=400&height=400&seq=img6&orientation=squarish",
+          hashtags: "#운동스타그램 #헬스타그램 #운동 #피트니스 #다이어트 #운동복",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20dessert%20cafe%2C%20colorful%20macarons%2C%20aesthetic%20pastries%2C%20sweet%20treats%2C%20cafe%20interior&width=400&height=400&seq=img7&orientation=squarish",
+          hashtags: "#디저트 #마카롱 #디저트카페 #달달 #카페스타그램 #빵스타그램",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Seoul%20night%20skyline%2C%20city%20lights%2C%20urban%20photography%2C%20Namsan%20Tower%2C%20modern%20architecture&width=400&height=400&seq=img8&orientation=squarish",
+          hashtags: "#서울야경 #도시 #야경 #남산타워 #시티뷰 #나이트라이프",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20traditional%20hanbok%2C%20colorful%20traditional%20dress%2C%20palace%20background%2C%20cultural%20photography&width=400&height=400&seq=img9&orientation=squarish",
+          hashtags: "#한복 #전통의상 #경복궁 #한국전통 #문화체험 #한복체험",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20pet%20cafe%2C%20cute%20dogs%2C%20animal%20photography%2C%20cafe%20interior%2C%20pet%20friendly&width=400&height=400&seq=img10&orientation=squarish",
+          hashtags: "#반려견 #강아지 #애견카페 #펫스타그램 #멍스타그램 #반려동물",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20hiking%20trail%2C%20mountain%20view%2C%20nature%20photography%2C%20outdoor%20adventure%2C%20forest%20path&width=400&height=400&seq=img11&orientation=squarish",
+          hashtags: "#등산 #산스타그램 #아웃도어 #자연 #힐링 #트레킹",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20art%20exhibition%2C%20modern%20gallery%2C%20artistic%20installation%2C%20contemporary%20art%2C%20museum%20interior&width=400&height=400&seq=img12&orientation=squarish",
+          hashtags: "#전시회 #미술관 #아트 #현대미술 #전시 #문화생활",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20beach%20sunset%2C%20coastal%20view%2C%20summer%20vibes%2C%20ocean%20waves%2C%20vacation%20mood&width=400&height=400&seq=img13&orientation=squarish",
+          hashtags: "#해변 #일몰 #바다 #여름 #휴가 #바다여행",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20BBQ%2C%20grilled%20meat%2C%20restaurant%20setting%2C%20traditional%20dining%2C%20food%20photography&width=400&height=400&seq=img14&orientation=squarish",
+          hashtags: "#삼겹살 #고기 #먹스타그램 #맛집 #회식 #불고기",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20bookstore%20cafe%2C%20reading%20corner%2C%20cozy%20interior%2C%20bookshelves%2C%20coffee%20and%20books&width=400&height=400&seq=img15&orientation=squarish",
+          hashtags: "#북카페 #독서 #책스타그램 #카페 #독서모임 #책추천",
+        },
+      ];
+
+      // 추가 이미지 데이터 (무한 스크롤용)
+      const additionalImageData = [
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20street%20market%2C%20traditional%20market%2C%20colorful%20goods%2C%20food%20stalls%2C%20local%20culture&width=400&height=400&seq=img16&orientation=squarish",
+          hashtags: "#전통시장 #시장 #구경 #먹거리 #쇼핑 #로컬",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20camping%20site%2C%20tent%20in%20nature%2C%20outdoor%20lifestyle%2C%20night%20camping%2C%20starry%20sky&width=400&height=400&seq=img17&orientation=squarish",
+          hashtags: "#캠핑 #아웃도어 #텐트 #캠핑장 #글램핑 #자연",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20bicycle%20path%2C%20cycling%20route%2C%20riverside%20view%2C%20outdoor%20activity%2C%20urban%20bike%20lane&width=400&height=400&seq=img18&orientation=squarish",
+          hashtags: "#자전거 #라이딩 #자전거길 #운동 #취미 #한강",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20flower%20market%2C%20colorful%20flowers%2C%20floral%20arrangement%2C%20botanical%20beauty%2C%20flower%20shop&width=400&height=400&seq=img19&orientation=squarish",
+          hashtags: "#꽃 #플라워 #꽃시장 #꽃스타그램 #식물 #꽃집",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20music%20festival%2C%20concert%20crowd%2C%20stage%20performance%2C%20live%20music%2C%20entertainment%20event&width=400&height=400&seq=img20&orientation=squarish",
+          hashtags: "#페스티벌 #공연 #음악 #콘서트 #라이브 #뮤직",
+        },
+        {
+          imageUrl:
+            "https://readdy.ai/api/search-image?query=Korean%20pottery%20workshop%2C%20traditional%20ceramics%2C%20handmade%20craft%2C%20artistic%20process%2C%20clay%20art&width=400&height=400&seq=img21&orientation=squarish",
+          hashtags: "#도자기 #공예 #핸드메이드 #취미생활 #작업실 #아트",
+        },
+      ];
+    </script>
+
+    <script id="imageLoadingScript">
+      document.addEventListener("DOMContentLoaded", function () {
+        const imageGrid = document.getElementById("imageGrid");
+        const loadingIndicator = document.getElementById("loadingIndicator");
+        let isLoading = false;
+        let currentPage = 1;
+
+        // 이미지 로드 함수
+        function loadImages(data) {
+          data.forEach((item) => {
+            const imageContainer = document.createElement("div");
+            imageContainer.className = "cursor-pointer";
+
+            const imageWrapper = document.createElement("div");
+            imageWrapper.className = "image-container";
+
+            // 이미지 로딩 플레이스홀더
+            const placeholder = document.createElement("div");
+            placeholder.className = "absolute inset-0 shimmer";
+            imageWrapper.appendChild(placeholder);
+
+            const img = document.createElement("img");
+            img.src = item.imageUrl;
+            img.alt = "인스타그램 이미지";
+            img.className = "opacity-0 transition-opacity duration-300";
+
+            img.onload = function () {
+              placeholder.remove();
+              img.classList.remove("opacity-0");
+            };
+
+            imageWrapper.appendChild(img);
+            imageContainer.appendChild(imageWrapper);
+
+            // 해시태그 영역
+            const hashtagDiv = document.createElement("div");
+            hashtagDiv.className = "hashtag text-xs text-gray-500 p-2 h-12";
+            hashtagDiv.textContent = item.hashtags;
+            imageContainer.appendChild(hashtagDiv);
+
+            imageGrid.appendChild(imageContainer);
+
+            // 이미지 클릭 이벤트
+            imageContainer.addEventListener("click", function () {
+              // 이미지 상세 페이지로 이동하는 기능 (실제 구현은 생략)
+              console.log("이미지 클릭:", item.hashtags);
+            });
+          });
+
+          isLoading = false;
+          loadingIndicator.style.display = "none";
+        }
+
+        // 초기 이미지 로드
+        loadImages(imageData);
+
+        // 스크롤 이벤트 리스너
+        window.addEventListener("scroll", function () {
+          if (isLoading) return;
+
+          const scrollPosition = window.scrollY + window.innerHeight;
+          const pageHeight = document.documentElement.scrollHeight;
+
+          // 페이지 하단에 도달했을 때 추가 이미지 로드
+          if (scrollPosition >= pageHeight - 300) {
+            isLoading = true;
+            loadingIndicator.style.display = "flex";
+
+            // 로딩 시뮬레이션 (실제로는 API 호출 등이 들어갈 수 있음)
+            setTimeout(() => {
+              loadImages(additionalImageData);
+              currentPage++;
+            }, 1500);
+          }
+        });
+
+        // 풀-투-리프레시 기능 (간단한 구현)
+        let touchStartY = 0;
+        let touchEndY = 0;
+        const refreshThreshold = 100; // 당겨야 하는 거리 (픽셀)
+        let isRefreshing = false;
+
+        document.addEventListener(
+          "touchstart",
+          function (e) {
+            touchStartY = e.touches[0].clientY;
+          },
+          { passive: true },
+        );
+
+        document.addEventListener(
+          "touchmove",
+          function (e) {
+            if (isRefreshing) return;
+
+            touchEndY = e.touches[0].clientY;
+            const distance = touchEndY - touchStartY;
+
+            // 페이지 최상단에서 아래로 당길 때만 작동
+            if (window.scrollY === 0 && distance > 0 && distance < refreshThreshold) {
+              // 당기는 시각적 피드백을 줄 수 있음 (실제 구현은 생략)
+            }
+          },
+          { passive: true },
+        );
+
+        document.addEventListener(
+          "touchend",
+          function () {
+            if (isRefreshing) return;
+
+            const distance = touchEndY - touchStartY;
+
+            // 충분히 당겼을 때 새로고침 실행
+            if (window.scrollY === 0 && distance > refreshThreshold) {
+              isRefreshing = true;
+
+              // 새로고침 애니메이션 표시 (실제 구현은 생략)
+              const refreshIndicator = document.createElement("div");
+              refreshIndicator.className =
+                "fixed top-20 left-0 w-full flex justify-center items-center py-4 bg-white z-50";
+              refreshIndicator.innerHTML =
+                '<div class="w-8 h-8 flex items-center justify-center"><i class="ri-refresh-line ri-spin ri-2x text-primary"></i></div>';
+              document.body.appendChild(refreshIndicator);
+
+              // 새로고침 시뮬레이션
+              setTimeout(() => {
+                document.body.removeChild(refreshIndicator);
+                window.location.reload();
+              }, 1500);
+            }
+          },
+          { passive: true },
+        );
+      });
+    </script>
+
+    <script id="categoryButtonsScript">
+      document.addEventListener("DOMContentLoaded", function () {
+        const categoryButtons = document.querySelectorAll(".category-scroll button");
+
+        categoryButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            // 모든 버튼에서 활성화 스타일 제거
+            categoryButtons.forEach((btn) => {
+              btn.classList.remove("bg-primary", "text-white");
+              btn.classList.add("bg-gray-100", "text-gray-700");
+            });
+
+            // 클릭한 버튼에 활성화 스타일 적용
+            this.classList.remove("bg-gray-100", "text-gray-700");
+            this.classList.add("bg-primary", "text-white");
+
+            // 카테고리 필터링 시뮬레이션
+            const categoryName = this.textContent;
+            console.log("선택된 카테고리:", categoryName);
+
+            // 실제 구현에서는 여기서 이미지 필터링 로직이 들어갈 수 있음
+            // 현재는 시각적 피드백만 제공
+
+            // 로딩 표시
+            const imageGrid = document.getElementById("imageGrid");
+            const loadingIndicator = document.getElementById("loadingIndicator");
+
+            imageGrid.innerHTML = "";
+            loadingIndicator.style.display = "flex";
+
+            // 필터링된 이미지 로드 시뮬레이션
+            setTimeout(() => {
+              // 원래 이미지 다시 로드 (실제로는 필터링된 이미지가 로드됨)
+              const imageLoadingScript =
+                document.getElementById("imageLoadingScript");
+              const imageData = window.imageData || [];
+
+              loadImages(imageData);
+              loadingIndicator.style.display = "none";
+            }, 800);
+          });
+        });
+
+        // 이미지 로드 함수 (카테고리 버튼 스크립트에서 사용)
+        function loadImages(data) {
+          const imageGrid = document.getElementById("imageGrid");
+
+          data.forEach((item) => {
+            const imageContainer = document.createElement("div");
+            imageContainer.className = "cursor-pointer";
+
+            const imageWrapper = document.createElement("div");
+            imageWrapper.className = "image-container";
+
+            const img = document.createElement("img");
+            img.src = item.imageUrl;
+            img.alt = "인스타그램 이미지";
+            imageWrapper.appendChild(img);
+            imageContainer.appendChild(imageWrapper);
+
+            const hashtagDiv = document.createElement("div");
+            hashtagDiv.className = "hashtag text-xs text-gray-500 p-2 h-12";
+            hashtagDiv.textContent = item.hashtags;
+            imageContainer.appendChild(hashtagDiv);
+
+            imageGrid.appendChild(imageContainer);
+          });
+        }
+      });
+    </script>
+
+    <script id="hashtagClickScript">
+      document.addEventListener("DOMContentLoaded", function () {
+        // 해시태그 클릭 이벤트 위임
+        document.getElementById("imageGrid").addEventListener("click", function (e) {
+          // 해시태그 영역 클릭 확인
+          if (e.target.classList.contains("hashtag")) {
+            const clickedHashtag = e.target.textContent.split(" ")[0]; // 첫 번째 해시태그만 가져옴
+            console.log("해시태그 클릭:", clickedHashtag);
+
+            // 해시태그 검색 시뮬레이션
+            // 실제 구현에서는 해당 해시태그로 검색 결과 페이지로 이동
+            alert(`"${clickedHashtag}" 검색 결과로 이동합니다.`);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
+
