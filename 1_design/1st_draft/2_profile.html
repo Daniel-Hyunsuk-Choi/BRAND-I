@@ -43,31 +43,31 @@
     <style>
       :where([class^="ri-"])::before { content: "\f3c2"; }
       body {
-          font-family: 'Noto Sans KR', sans-serif;
-          background-color: #FAFAFA;
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #FAFAFA;
       }
       .story-circle {
-          border: 2px solid #E0E0E0;
-          padding: 2px;
+      border: 2px solid #E0E0E0;
+      padding: 2px;
       }
       .story-active {
-          border: 2px solid transparent;
-          background-image: linear-gradient(#fff, #fff),
-                            linear-gradient(45deg, #5D5FEF, #F5A623);
-          background-origin: border-box;
-          background-clip: content-box, border-box;
+      border: 2px solid transparent;
+      background-image: linear-gradient(#fff, #fff),
+      linear-gradient(45deg, #5D5FEF, #F5A623);
+      background-origin: border-box;
+      background-clip: content-box, border-box;
       }
       .room-scroll::-webkit-scrollbar {
-          display: none;
+      display: none;
       }
       .feed-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 2px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
       }
       .feed-item {
-          aspect-ratio: 1/1;
-          position: relative;
+      aspect-ratio: 1/1;
+      position: relative;
       }
     </style>
   </head>
@@ -86,7 +86,6 @@
         </div>
       </div>
     </nav>
-
     <!-- Main Content -->
     <main class="pt-16 pb-16">
       <!-- Profile Section -->
@@ -112,47 +111,46 @@
                 프로필 편집
               </button>
             </div>
-            <div class="flex justify-between mb-3 text-sm">
-              <div class="text-center">
-                <div class="font-semibold">42</div>
-                <div class="text-gray-600">게시물</div>
+            <div class="flex items-center mb-3">
+              <div
+                class="flex items-center bg-primary bg-opacity-10 px-3 py-1 rounded-full"
+              >
+                <i class="ri-medal-line text-primary mr-1"></i>
+                <span class="text-sm font-medium text-primary"
+                  >챌린지 마스터</span
+                >
               </div>
-              <div class="text-center">
-                <div class="font-semibold">1,254</div>
-                <div class="text-gray-600">팔로워</div>
-              </div>
-              <div class="text-center">
-                <div class="font-semibold">876</div>
-                <div class="text-gray-600">팔로잉</div>
-              </div>
+              <div class="text-xs text-gray-500 ml-2">(완료 42개)</div>
+            </div>
+            <div class="flex flex-wrap gap-2 mb-3">
+              <span
+                class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs"
+                >요리</span
+              >
+              <span
+                class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs"
+                >사진</span
+              >
+              <span
+                class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs"
+                >미술</span
+              >
+              <span
+                class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs"
+                >여행</span
+              >
             </div>
             <p class="text-sm">
-              여행 | 사진 | 디자인 <br />
               서울에 거주하는 디자이너 📸✨<br />
               새로운 경험을 사랑합니다
             </p>
           </div>
         </div>
       </section>
-
       <!-- Rooms Section -->
       <section class="py-4 border-t border-gray-100">
         <h2 class="px-4 mb-3 text-base font-medium">참여 중인 방</h2>
         <div class="room-scroll flex overflow-x-auto px-4 space-x-3 pb-2">
-          <!-- New Room Button -->
-          <div class="flex-shrink-0 w-24">
-            <div
-              class="bg-gray-50 border border-gray-200 rounded-lg h-24 flex flex-col items-center justify-center cursor-pointer"
-            >
-              <div
-                class="w-10 h-10 flex items-center justify-center bg-primary rounded-full mb-1"
-              >
-                <i class="ri-add-line ri-lg text-white"></i>
-              </div>
-              <span class="text-xs text-gray-700 font-medium">새로운 방</span>
-            </div>
-          </div>
-
           <!-- Room 1 -->
           <div class="flex-shrink-0 w-24">
             <div class="rounded-lg overflow-hidden">
@@ -170,7 +168,6 @@
               </div>
             </div>
           </div>
-
           <!-- Room 2 -->
           <div class="flex-shrink-0 w-24">
             <div class="rounded-lg overflow-hidden">
@@ -188,7 +185,6 @@
               </div>
             </div>
           </div>
-
           <!-- Room 3 -->
           <div class="flex-shrink-0 w-24">
             <div class="rounded-lg overflow-hidden">
@@ -206,7 +202,6 @@
               </div>
             </div>
           </div>
-
           <!-- Room 4 -->
           <div class="flex-shrink-0 w-24">
             <div class="rounded-lg overflow-hidden">
@@ -226,7 +221,6 @@
               </div>
             </div>
           </div>
-
           <!-- Room 5 -->
           <div class="flex-shrink-0 w-24">
             <div class="rounded-lg overflow-hidden">
@@ -246,7 +240,6 @@
           </div>
         </div>
       </section>
-
       <!-- Feed Grid Section -->
       <section class="py-4 border-t border-gray-100">
         <div class="px-4 mb-3 flex items-center justify-between">
@@ -260,7 +253,6 @@
             </div>
           </div>
         </div>
-
         <div class="feed-grid">
           <!-- Feed Item 1 -->
           <div class="feed-item">
@@ -284,7 +276,6 @@
               />
             </div>
           </div>
-
           <!-- Feed Item 2 -->
           <div class="feed-item">
             <img
@@ -307,7 +298,6 @@
               />
             </div>
           </div>
-
           <!-- Feed Item 3 -->
           <div class="feed-item">
             <img
@@ -316,21 +306,25 @@
               class="w-full h-full object-cover"
             />
             <div
-              class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center bg-black bg-opacity-30 rounded-full"
+              class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center bg-primary bg-opacity-90 rounded-full"
             >
-              <i class="ri-lock-line ri-sm text-white"></i>
+              <i class="ri-lock-fill ri-sm text-white"></i>
             </div>
             <div
-              class="absolute bottom-2 left-2 w-6 h-6 rounded-full overflow-hidden border border-white"
+              class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 px-2 py-1 flex items-center"
             >
-              <img
-                src="https://readdy.ai/api/search-image?query=book%20club%20with%20stacked%20books%2C%20reading%20glasses%2C%20cozy%20atmosphere%2C%20literary%20discussion&width=50&height=50&seq=room3sm&orientation=squarish"
-                alt="독서 모임"
-                class="w-full h-full object-cover"
-              />
+              <div
+                class="w-4 h-4 rounded-full overflow-hidden border border-white mr-1"
+              >
+                <img
+                  src="https://readdy.ai/api/search-image?query=book%20club%20with%20stacked%20books%2C%20reading%20glasses%2C%20cozy%20atmosphere%2C%20literary%20discussion&width=50&height=50&seq=room3sm&orientation=squarish"
+                  alt="독서 모임"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <span class="text-white text-xs truncate">독서 챌린지</span>
             </div>
           </div>
-
           <!-- Feed Item 4 -->
           <div class="feed-item">
             <img
@@ -353,7 +347,6 @@
               />
             </div>
           </div>
-
           <!-- Feed Item 5 -->
           <div class="feed-item">
             <img
@@ -376,7 +369,6 @@
               />
             </div>
           </div>
-
           <!-- Feed Item 6 -->
           <div class="feed-item">
             <img
@@ -399,7 +391,6 @@
               />
             </div>
           </div>
-
           <!-- Feed Item 7 -->
           <div class="feed-item">
             <img
@@ -422,7 +413,6 @@
               />
             </div>
           </div>
-
           <!-- Feed Item 8 -->
           <div class="feed-item">
             <img
@@ -445,7 +435,6 @@
               />
             </div>
           </div>
-
           <!-- Feed Item 9 -->
           <div class="feed-item">
             <img
@@ -471,23 +460,16 @@
         </div>
       </section>
     </main>
-
     <!-- Tab Bar -->
     <nav
       class="fixed bottom-0 w-full bg-white border-t border-gray-100 px-2 py-2"
     >
-      <div class="grid grid-cols-5 gap-1">
+      <div class="grid grid-cols-4 gap-1">
         <div class="flex flex-col items-center justify-center cursor-pointer">
           <div class="w-6 h-6 flex items-center justify-center">
-            <i class="ri-home-line ri-lg"></i>
+            <i class="ri-compass-line ri-lg"></i>
           </div>
-          <span class="text-xs mt-1">홈</span>
-        </div>
-        <div class="flex flex-col items-center justify-center cursor-pointer">
-          <div class="w-6 h-6 flex items-center justify-center">
-            <i class="ri-search-line ri-lg"></i>
-          </div>
-          <span class="text-xs mt-1">검색</span>
+          <span class="text-xs mt-1">탐색</span>
         </div>
         <div class="flex flex-col items-center justify-center cursor-pointer">
           <div class="w-6 h-6 flex items-center justify-center">
@@ -497,9 +479,9 @@
         </div>
         <div class="flex flex-col items-center justify-center cursor-pointer">
           <div class="w-6 h-6 flex items-center justify-center">
-            <i class="ri-heart-line ri-lg"></i>
+            <i class="ri-flag-line ri-lg"></i>
           </div>
-          <span class="text-xs mt-1">활동</span>
+          <span class="text-xs mt-1">챌린지</span>
         </div>
         <div class="flex flex-col items-center justify-center cursor-pointer">
           <div class="w-6 h-6 flex items-center justify-center">
@@ -513,77 +495,69 @@
         </div>
       </div>
     </nav>
-
     <script id="roomInteractions">
       document.addEventListener("DOMContentLoaded", function () {
         const newRoomButton = document.querySelector(".bg-gray-50.border");
-
         newRoomButton.addEventListener("click", function () {
           const modal = document.createElement("div");
           modal.className =
             "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
           modal.innerHTML = `
-                          <div class="bg-white rounded-lg w-[300px] p-5">
-                              <h3 class="text-lg font-medium mb-4">새로운 방 탐색</h3>
-                              <div class="mb-4">
-                                  <input type="text" placeholder="관심사 검색" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
-                              </div>
-                              <div class="flex flex-wrap gap-2 mb-4">
-                                  <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">여행</span>
-                                  <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">요리</span>
-                                  <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">독서</span>
-                                  <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">운동</span>
-                                  <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">음악</span>
-                              </div>
-                              <div class="flex justify-end space-x-2">
-                                  <button class="px-4 py-2 text-gray-600 !rounded-button">취소</button>
-                                  <button class="px-4 py-2 bg-primary text-white !rounded-button">검색</button>
-                              </div>
-                          </div>
-                      `;
-
+      <div class="bg-white rounded-lg w-[300px] p-5">
+      <h3 class="text-lg font-medium mb-4">새로운 방 탐색</h3>
+      <div class="mb-4">
+      <input type="text" placeholder="관심사 검색" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+      </div>
+      <div class="flex flex-wrap gap-2 mb-4">
+      <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">여행</span>
+      <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">요리</span>
+      <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">독서</span>
+      <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">운동</span>
+      <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs">음악</span>
+      </div>
+      <div class="flex justify-end space-x-2">
+      <button class="px-4 py-2 text-gray-600 !rounded-button">취소</button>
+      <button class="px-4 py-2 bg-primary text-white !rounded-button">검색</button>
+      </div>
+      </div>
+      `;
           document.body.appendChild(modal);
-
           modal.addEventListener("click", function (e) {
             if (e.target === modal || e.target.textContent === "취소") {
               document.body.removeChild(modal);
             }
           });
         });
-
         const roomCards = document.querySelectorAll(".room-scroll .rounded-lg");
         roomCards.forEach((card) => {
           if (!card.closest(".bg-gray-50")) {
             card.addEventListener("click", function () {
               const roomName = this.querySelector("span").textContent;
               const roomImage = this.querySelector("img").src;
-
               const modal = document.createElement("div");
               modal.className =
                 "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
               modal.innerHTML = `
-                                  <div class="bg-white rounded-lg w-[300px] overflow-hidden">
-                                      <img src="${roomImage}" alt="${roomName}" class="w-full h-40 object-cover">
-                                      <div class="p-4">
-                                          <h3 class="text-lg font-medium mb-2">${roomName}</h3>
-                                          <p class="text-sm text-gray-600 mb-4">이 방에서 다양한 ${roomName.replace(" 모임", "").replace(" 클럽", "").replace(" 클래스", "").replace(" 전시", "")} 관련 활동과 정보를 공유하세요.</p>
-                                          <div class="flex items-center mb-4">
-                                              <div class="flex -space-x-2 mr-3">
-                                                  <img src="https://readdy.ai/api/search-image?query=portrait%20of%20a%20young%20Korean%20woman%2C%20professional%20headshot&width=40&height=40&seq=member1&orientation=squarish" class="w-6 h-6 rounded-full border border-white">
-                                                  <img src="https://readdy.ai/api/search-image?query=portrait%20of%20a%20young%20Korean%20man%2C%20professional%20headshot&width=40&height=40&seq=member2&orientation=squarish" class="w-6 h-6 rounded-full border border-white">
-                                                  <img src="https://readdy.ai/api/search-image?query=portrait%20of%20a%20middle-aged%20Korean%20woman%2C%20professional%20headshot&width=40&height=40&seq=member3&orientation=squarish" class="w-6 h-6 rounded-full border border-white">
-                                              </div>
-                                              <span class="text-xs text-gray-600">멤버 32명</span>
-                                          </div>
-                                          <div class="flex justify-end">
-                                              <button class="px-4 py-2 bg-primary text-white !rounded-button">방 입장하기</button>
-                                          </div>
-                                      </div>
-                                  </div>
-                              `;
-
+      <div class="bg-white rounded-lg w-[300px] overflow-hidden">
+      <img src="${roomImage}" alt="${roomName}" class="w-full h-40 object-cover">
+      <div class="p-4">
+      <h3 class="text-lg font-medium mb-2">${roomName}</h3>
+      <p class="text-sm text-gray-600 mb-4">이 방에서 다양한 ${roomName.replace(" 모임", "").replace(" 클럽", "").replace(" 클래스", "").replace(" 전시", "")} 관련 활동과 정보를 공유하세요.</p>
+      <div class="flex items-center mb-4">
+      <div class="flex -space-x-2 mr-3">
+      <img src="https://readdy.ai/api/search-image?query=portrait%20of%20a%20young%20Korean%20woman%2C%20professional%20headshot&width=40&height=40&seq=member1&orientation=squarish" class="w-6 h-6 rounded-full border border-white">
+      <img src="https://readdy.ai/api/search-image?query=portrait%20of%20a%20young%20Korean%20man%2C%20professional%20headshot&width=40&height=40&seq=member2&orientation=squarish" class="w-6 h-6 rounded-full border border-white">
+      <img src="https://readdy.ai/api/search-image?query=portrait%20of%20a%20middle-aged%20Korean%20woman%2C%20professional%20headshot&width=40&height=40&seq=member3&orientation=squarish" class="w-6 h-6 rounded-full border border-white">
+      </div>
+      <span class="text-xs text-gray-600">멤버 32명</span>
+      </div>
+      <div class="flex justify-end">
+      <button class="px-4 py-2 bg-primary text-white !rounded-button">방 입장하기</button>
+      </div>
+      </div>
+      </div>
+      `;
               document.body.appendChild(modal);
-
               modal.addEventListener("click", function (e) {
                 if (e.target === modal) {
                   document.body.removeChild(modal);
@@ -594,73 +568,68 @@
         });
       });
     </script>
-
     <script id="feedInteractions">
       document.addEventListener("DOMContentLoaded", function () {
         const feedItems = document.querySelectorAll(".feed-item");
-
         feedItems.forEach((item) => {
           item.addEventListener("click", function () {
             const feedImage = this.querySelector("img").src;
             const isPrivate = this.querySelector(".ri-lock-line") !== null;
             const roomImage = this.querySelector(".absolute.bottom-2 img").src;
-
             const modal = document.createElement("div");
             modal.className =
               "fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50";
             modal.innerHTML = `
-                              <div class="bg-white w-full max-w-md rounded-lg overflow-hidden">
-                                  <div class="p-3 border-b flex items-center">
-                                      <img src="https://readdy.ai/api/search-image?query=portrait%20of%20a%20young%20Korean%20woman%20with%20short%20black%20hair%2C%20natural%20makeup%2C%20smiling%2C%20professional%20headshot%2C%20high%20quality%2C%20soft%20lighting%2C%20neutral%20background&width=40&height=40&seq=profilemodal&orientation=squarish"
-                                           alt="프로필"
-                                           class="w-8 h-8 rounded-full mr-2">
-                                      <div>
-                                          <div class="flex items-center">
-                                              <span class="font-medium text-sm">김민지</span>
-                                              <span class="ml-2 text-xs text-gray-500">2시간 전</span>
-                                          </div>
-                                          <div class="flex items-center">
-                                              <img src="${roomImage}" alt="방" class="w-4 h-4 rounded-full mr-1">
-                                              <span class="text-xs text-gray-600">
-                                                  ${isPrivate ? "비공개 방" : "공개 방"}
-                                                  <i class="ri-${isPrivate ? "lock" : "lock-unlock"}-line ri-xs ml-1"></i>
-                                              </span>
-                                          </div>
-                                      </div>
-                                      <button class="ml-auto">
-                                          <i class="ri-more-fill"></i>
-                                      </button>
-                                  </div>
-                                  <img src="${feedImage}" alt="피드 이미지" class="w-full aspect-square object-cover">
-                                  <div class="p-3">
-                                      <div class="flex items-center justify-between mb-2">
-                                          <div class="flex items-center space-x-3">
-                                              <button class="w-8 h-8 flex items-center justify-center">
-                                                  <i class="ri-heart-line ri-lg"></i>
-                                              </button>
-                                              <button class="w-8 h-8 flex items-center justify-center">
-                                                  <i class="ri-chat-1-line ri-lg"></i>
-                                              </button>
-                                              <button class="w-8 h-8 flex items-center justify-center">
-                                                  <i class="ri-share-line ri-lg"></i>
-                                              </button>
-                                          </div>
-                                          <button class="w-8 h-8 flex items-center justify-center">
-                                              <i class="ri-bookmark-line ri-lg"></i>
-                                          </button>
-                                      </div>
-                                      <div class="text-sm mb-1">좋아요 124개</div>
-                                      <div class="text-sm">
-                                          <span class="font-medium">김민지</span>
-                                          <span>오늘 ${isPrivate ? "비공개 방" : "공개 방"}에서 즐거운 시간을 보냈어요! 다음에 또 만나요 😊 #일상 #추억 #소통</span>
-                                      </div>
-                                      <div class="text-xs text-gray-500 mt-1">댓글 12개 모두 보기</div>
-                                  </div>
-                              </div>
-                          `;
-
+      <div class="bg-white w-full max-w-md rounded-lg overflow-hidden">
+      <div class="p-3 border-b flex items-center">
+      <img src="https://readdy.ai/api/search-image?query=portrait%20of%20a%20young%20Korean%20woman%20with%20short%20black%20hair%2C%20natural%20makeup%2C%20smiling%2C%20professional%20headshot%2C%20high%20quality%2C%20soft%20lighting%2C%20neutral%20background&width=40&height=40&seq=profilemodal&orientation=squarish"
+      alt="프로필"
+      class="w-8 h-8 rounded-full mr-2">
+      <div>
+      <div class="flex items-center">
+      <span class="font-medium text-sm">김민지</span>
+      <span class="ml-2 text-xs text-gray-500">2시간 전</span>
+      </div>
+      <div class="flex items-center">
+      <img src="${roomImage}" alt="방" class="w-4 h-4 rounded-full mr-1">
+      <span class="text-xs text-gray-600">
+      ${isPrivate ? "비공개 방" : "공개 방"}
+      <i class="ri-${isPrivate ? "lock" : "lock-unlock"}-line ri-xs ml-1"></i>
+      </span>
+      </div>
+      </div>
+      <button class="ml-auto">
+      <i class="ri-more-fill"></i>
+      </button>
+      </div>
+      <img src="${feedImage}" alt="피드 이미지" class="w-full aspect-square object-cover">
+      <div class="p-3">
+      <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center space-x-3">
+      <button class="w-8 h-8 flex items-center justify-center">
+      <i class="ri-heart-line ri-lg"></i>
+      </button>
+      <button class="w-8 h-8 flex items-center justify-center">
+      <i class="ri-chat-1-line ri-lg"></i>
+      </button>
+      <button class="w-8 h-8 flex items-center justify-center">
+      <i class="ri-share-line ri-lg"></i>
+      </button>
+      </div>
+      <button class="w-8 h-8 flex items-center justify-center">
+      <i class="ri-bookmark-line ri-lg"></i>
+      </button>
+      </div>
+      <div class="text-sm mb-1">좋아요 124개</div>
+      <div class="text-sm">
+      <span class="font-medium">김민지</span>
+      <span>오늘 ${isPrivate ? "비공개 방" : "공개 방"}에서 즐거운 시간을 보냈어요! 다음에 또 만나요 😊 #일상 #추억 #소통</span>
+      </div>
+      <div class="text-xs text-gray-500 mt-1">댓글 12개 모두 보기</div>
+      </div>
+      </div>
+      `;
             document.body.appendChild(modal);
-
             modal.addEventListener("click", function (e) {
               if (e.target === modal) {
                 document.body.removeChild(modal);

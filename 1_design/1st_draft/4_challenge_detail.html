@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>챌린지 방</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#4F46E5", secondary: "#8B5CF6" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+      font-family: 'Pretendard', sans-serif;
+      }
+      .chat-container {
+      height: calc(100vh - 420px);
+      overflow-y: auto;
+      }
+      .calendar-highlight {
+      background: linear-gradient(45deg, rgba(79, 70, 229, 0.2), rgba(139, 92, 246, 0.2));
+      border-radius: 4px;
+      }
+      .calendar-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 50;
+      justify-content: center;
+      align-items: center;
+      }
+      .challenge-detail-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 50;
+      justify-content: center;
+      align-items: center;
+      }
+    </style>
+  </head>
+  <body class="bg-white text-gray-900">
+    <!-- 상단 네비게이션 바 -->
+    <nav
+      class="fixed top-0 w-full bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between z-10"
+    >
+      <div class="flex items-center">
+        <button class="w-8 h-8 flex items-center justify-center cursor-pointer">
+          <i class="ri-arrow-left-s-line ri-lg"></i>
+        </button>
+      </div>
+      <h1 class="text-lg font-semibold">30일 운동 챌린지</h1>
+      <div class="flex items-center">
+        <button class="w-8 h-8 flex items-center justify-center cursor-pointer">
+          <i class="ri-share-line ri-lg"></i>
+        </button>
+      </div>
+    </nav>
+    <!-- 메인 컨텐츠 -->
+    <main class="pt-14 pb-16 px-4">
+      <!-- 챌린지 정보 섹션 -->
+      <section class="mt-4 flex gap-4">
+        <!-- 달력 버튼 -->
+        <div
+          class="w-20 h-20 bg-gray-50 rounded-lg flex flex-col items-center justify-center cursor-pointer shadow-sm"
+          id="calendarButton"
+        >
+          <i class="ri-calendar-line ri-xl text-primary"></i>
+          <span class="text-xs mt-1">달력</span>
+        </div>
+        <!-- 현재 챌린지 정보 -->
+        <div class="flex-1 bg-gray-50 rounded-lg p-3 shadow-sm">
+          <div class="flex justify-between items-start">
+            <h2 class="font-semibold">매일 30분 운동하기</h2>
+            <button
+              class="text-xs text-primary cursor-pointer"
+              id="viewDetailButton"
+            >
+              상세보기
+            </button>
+          </div>
+          <p class="text-xs text-gray-600 mt-1">2025.06.01 - 2025.06.30</p>
+          <p class="text-xs text-gray-600 mt-1">
+            저번에 웨이트 챌린지를 했으니 이번에는 챌린지에서는 유산소를
+            해봅시다! 각자 하시는 유산소 운동을 사진으로 공유해주세요!
+          </p>
+          <div class="flex gap-2 mt-2">
+            <span
+              class="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full"
+              >참여자 42명</span
+            >
+            <span
+              class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full"
+              >완료 8명</span
+            >
+          </div>
+        </div>
+      </section>
+      <!-- 채팅 섹션 -->
+      <section class="mt-6">
+        <div class="flex justify-between items-center mb-2">
+          <h2 class="font-semibold">채팅</h2>
+          <span class="text-xs text-gray-500">23명 참여중</span>
+        </div>
+        <div class="chat-container bg-gray-50 rounded-lg p-3 mb-3">
+          <!-- 채팅 메시지들 -->
+          <div class="flex items-start mb-4">
+            <img
+              src="https://readdy.ai/api/search-image?query=asian%20woman%20profile%20portrait%2C%20minimalist%2C%20simple%20background&width=40&height=40&seq=1&orientation=squarish"
+              alt="프로필"
+              class="w-8 h-8 rounded-full mr-2"
+            />
+            <div>
+              <div class="flex items-center">
+                <span class="text-sm font-medium">김지은</span>
+                <span class="text-xs text-gray-500 ml-2">오전 10:23</span>
+              </div>
+              <div class="bg-white rounded-lg p-2 mt-1 shadow-sm">
+                <p class="text-sm">
+                  오늘 운동 인증합니다! 30분 러닝 완료했어요 💪
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-start mb-4">
+            <img
+              src="https://readdy.ai/api/search-image?query=asian%20man%20profile%20portrait%2C%20minimalist%2C%20simple%20background&width=40&height=40&seq=2&orientation=squarish"
+              alt="프로필"
+              class="w-8 h-8 rounded-full mr-2"
+            />
+            <div>
+              <div class="flex items-center">
+                <span class="text-sm font-medium">박현우</span>
+                <span class="text-xs text-gray-500 ml-2">오전 10:45</span>
+              </div>
+              <div class="bg-white rounded-lg p-2 mt-1 shadow-sm">
+                <p class="text-sm">
+                  저도 오늘 홈트레이닝 완료했습니다! 다들 화이팅하세요~
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-end mb-4">
+            <div class="mr-2">
+              <div class="flex items-center justify-end">
+                <span class="text-xs text-gray-500 mr-2">오전 11:05</span>
+                <span class="text-sm font-medium">나</span>
+              </div>
+              <div class="bg-primary text-white rounded-lg p-2 mt-1 shadow-sm">
+                <p class="text-sm">
+                  오늘은 어떤 운동이 좋을까요? 추천해주세요!
+                </p>
+              </div>
+            </div>
+            <img
+              src="https://readdy.ai/api/search-image?query=asian%20woman%20profile%20portrait%2C%20minimalist%2C%20simple%20background&width=40&height=40&seq=3&orientation=squarish"
+              alt="내 프로필"
+              class="w-8 h-8 rounded-full"
+            />
+          </div>
+          <div class="flex items-start mb-4">
+            <img
+              src="https://readdy.ai/api/search-image?query=asian%20woman%20profile%20portrait%2C%20minimalist%2C%20simple%20background&width=40&height=40&seq=4&orientation=squarish"
+              alt="프로필"
+              class="w-8 h-8 rounded-full mr-2"
+            />
+            <div>
+              <div class="flex items-center">
+                <span class="text-sm font-medium">이서연</span>
+                <span class="text-xs text-gray-500 ml-2">오전 11:10</span>
+              </div>
+              <div class="bg-white rounded-lg p-2 mt-1 shadow-sm">
+                <p class="text-sm">
+                  저는 오늘 HIIT 운동 30분 했어요. 짧지만 효과적이더라고요!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <img
+              src="https://readdy.ai/api/search-image?query=asian%20man%20profile%20portrait%2C%20minimalist%2C%20simple%20background&width=40&height=40&seq=5&orientation=squarish"
+              alt="프로필"
+              class="w-8 h-8 rounded-full mr-2"
+            />
+            <div>
+              <div class="flex items-center">
+                <span class="text-sm font-medium">최준호</span>
+                <span class="text-xs text-gray-500 ml-2">오전 11:23</span>
+              </div>
+              <div class="bg-white rounded-lg p-2 mt-1 shadow-sm">
+                <p class="text-sm">
+                  요가도 좋아요! 유튜브에 '모닝 요가 30분' 검색해보세요 👍
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 메시지 입력 영역 -->
+        <div class="flex items-center bg-gray-50 rounded-lg p-2">
+          <button
+            class="w-8 h-8 flex items-center justify-center cursor-pointer"
+          >
+            <i class="ri-image-line ri-lg text-gray-500"></i>
+          </button>
+          <button
+            class="w-8 h-8 flex items-center justify-center cursor-pointer"
+          >
+            <i class="ri-emotion-line ri-lg text-gray-500"></i>
+          </button>
+          <input
+            type="text"
+            placeholder="메시지를 입력하세요"
+            class="flex-1 bg-white rounded-full px-4 py-2 mx-2 text-sm border-none focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+          <button
+            class="w-8 h-8 flex items-center justify-center bg-primary rounded-full cursor-pointer"
+          >
+            <i class="ri-send-plane-fill ri-lg text-white"></i>
+          </button>
+        </div>
+      </section>
+    </main>
+    <!-- 하단 탭 바 -->
+    <nav
+      class="fixed bottom-0 w-full bg-white border-t border-gray-100 grid grid-cols-4 py-2 z-10"
+    >
+      <a
+        href="#"
+        class="flex flex-col items-center justify-center cursor-pointer"
+      >
+        <div class="w-6 h-6 flex items-center justify-center">
+          <i class="ri-compass-line ri-lg text-gray-500"></i>
+        </div>
+        <span class="text-xs text-gray-500 mt-1">탐색</span>
+      </a>
+      <a
+        href="#"
+        class="flex flex-col items-center justify-center cursor-pointer"
+      >
+        <div class="w-6 h-6 flex items-center justify-center">
+          <i class="ri-add-circle-line ri-lg text-gray-500"></i>
+        </div>
+        <span class="text-xs text-gray-500 mt-1">만들기</span>
+      </a>
+      <a
+        href="#"
+        class="flex flex-col items-center justify-center cursor-pointer"
+      >
+        <div class="w-6 h-6 flex items-center justify-center">
+          <i class="ri-flag-line ri-lg text-primary"></i>
+        </div>
+        <span class="text-xs text-primary font-medium mt-1">챌린지</span>
+      </a>
+      <a
+        href="#"
+        class="flex flex-col items-center justify-center cursor-pointer"
+      >
+        <div class="w-6 h-6 flex items-center justify-center">
+          <i class="ri-user-line ri-lg text-gray-500"></i>
+        </div>
+        <span class="text-xs text-gray-500 mt-1">프로필</span>
+      </a>
+    </nav>
+    <!-- 달력 모달 -->
+    <div class="calendar-container" id="calendarModal">
+      <div
+        class="bg-white rounded-xl w-[340px] max-h-[600px] overflow-y-auto p-5"
+      >
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-semibold text-lg">챌린지 달력</h3>
+          <button
+            class="w-8 h-8 flex items-center justify-center cursor-pointer"
+            id="closeCalendarButton"
+          >
+            <i class="ri-close-line ri-lg"></i>
+          </button>
+        </div>
+        <div class="mb-4">
+          <div class="flex justify-between items-center mb-2">
+            <button
+              class="w-8 h-8 flex items-center justify-center cursor-pointer"
+            >
+              <i class="ri-arrow-left-s-line"></i>
+            </button>
+            <h4 class="font-medium">2025년 6월</h4>
+            <button
+              class="w-8 h-8 flex items-center justify-center cursor-pointer"
+            >
+              <i class="ri-arrow-right-s-line"></i>
+            </button>
+          </div>
+          <div class="grid grid-cols-7 text-center text-xs text-gray-500 mb-1">
+            <div>일</div>
+            <div>월</div>
+            <div>화</div>
+            <div>수</div>
+            <div>목</div>
+            <div>금</div>
+            <div>토</div>
+          </div>
+          <div class="grid grid-cols-7 gap-1 text-sm">
+            <!-- 5월 마지막 주 -->
+            <div class="h-10 flex items-center justify-center text-gray-400">
+              26
+            </div>
+            <div class="h-10 flex items-center justify-center text-gray-400">
+              27
+            </div>
+            <div class="h-10 flex items-center justify-center text-gray-400">
+              28
+            </div>
+            <div class="h-10 flex items-center justify-center text-gray-400">
+              29
+            </div>
+            <div class="h-10 flex items-center justify-center text-gray-400">
+              30
+            </div>
+            <div class="h-10 flex items-center justify-center text-gray-400">
+              31
+            </div>
+            <div class="h-10 flex items-center justify-center">1</div>
+            <!-- 6월 첫째 주 -->
+            <div class="h-10 flex items-center justify-center">2</div>
+            <div class="h-10 flex items-center justify-center">3</div>
+            <div class="h-10 flex items-center justify-center">4</div>
+            <div class="h-10 flex items-center justify-center">5</div>
+            <div class="h-10 flex items-center justify-center">6</div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              7
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              8
+            </div>
+            <!-- 6월 둘째 주 -->
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              9
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              10
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              11
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              12
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              13
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              14
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              15
+            </div>
+            <!-- 6월 셋째 주 -->
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              16
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              17
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              18
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              19
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              20
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              21
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              22
+            </div>
+            <!-- 6월 넷째 주 -->
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              23
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              24
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              25
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              26
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              27
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              28
+            </div>
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              29
+            </div>
+            <!-- 6월 다섯째 주 -->
+            <div
+              class="h-10 flex items-center justify-center calendar-highlight cursor-pointer"
+              data-challenge="매일 30분 운동하기"
+            >
+              30
+            </div>
+            <div class="h-10 flex items-center justify-center text-gray-400">
+              1
+            </div>
+            <div class="h-10 flex items-center justify-center text-gray-400">
+              2
+            </div>
+            <div class="h-10 flex items-center justify-center text-gray-400">
+              3
+            </div>
+            <div class="h-10 flex items-center justify-center text-gray-400">
+              4
+            </div>
+            <div class="h-10 flex items-center justify-center text-gray-400">
+              5
+            </div>
+            <div class="h-10 flex items-center justify-center text-gray-400">
+              6
+            </div>
+          </div>
+        </div>
+        <div class="mt-4">
+          <h4 class="font-medium mb-2">이전 챌린지</h4>
+          <div
+            class="bg-gray-50 rounded-lg p-3 mb-3 cursor-pointer"
+            id="pastChallengeButton"
+          >
+            <div class="flex justify-between items-start">
+              <div>
+                <h5 class="font-medium text-sm">매일 물 2L 마시기</h5>
+                <p class="text-xs text-gray-600 mt-1">
+                  2025.05.01 - 2025.05.31
+                </p>
+              </div>
+              <span
+                class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full"
+                >완료</span
+              >
+            </div>
+            <div class="flex mt-2">
+              <div class="flex -space-x-2">
+                <img
+                  src="https://readdy.ai/api/search-image?query=asian%20woman%20profile%20portrait%2C%20minimalist%2C%20simple%20background&width=24&height=24&seq=6&orientation=squarish"
+                  alt="참여자"
+                  class="w-6 h-6 rounded-full border border-white"
+                />
+                <img
+                  src="https://readdy.ai/api/search-image?query=asian%20man%20profile%20portrait%2C%20minimalist%2C%20simple%20background&width=24&height=24&seq=7&orientation=squarish"
+                  alt="참여자"
+                  class="w-6 h-6 rounded-full border border-white"
+                />
+                <img
+                  src="https://readdy.ai/api/search-image?query=asian%20woman%20profile%20portrait%2C%20minimalist%2C%20simple%20background&width=24&height=24&seq=8&orientation=squarish"
+                  alt="참여자"
+                  class="w-6 h-6 rounded-full border border-white"
+                />
+                <div
+                  class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs border border-white"
+                >
+                  +12
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-3 cursor-pointer">
+            <div class="flex justify-between items-start">
+              <div>
+                <h5 class="font-medium text-sm">아침 명상 15분</h5>
+                <p class="text-xs text-gray-600 mt-1">
+                  2025.04.15 - 2025.04.30
+                </p>
+              </div>
+              <span
+                class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full"
+                >완료</span
+              >
+            </div>
+            <div class="flex mt-2">
+              <div class="flex -space-x-2">
+                <img
+                  src="https://readdy.ai/api/search-image?query=asian%20woman%20profile%20portrait%2C%20minimalist%2C%20simple%20background&width=24&height=24&seq=9&orientation=squarish"
+                  alt="참여자"
+                  class="w-6 h-6 rounded-full border border-white"
+                />
+                <img
+                  src="https://readdy.ai/api/search-image?query=asian%20man%20profile%20portrait%2C%20minimalist%2C%20simple%20background&width=24&height=24&seq=10&orientation=squarish"
+                  alt="참여자"
+                  class="w-6 h-6 rounded-full border border-white"
+                />
+                <img
+                  src="https://readdy.ai/api/search-image?query=asian%20woman%20profile%20portrait%2C%20minimalist%2C%20simple%20background&width=24&height=24&seq=11&orientation=squarish"
+                  alt="참여자"
+                  class="w-6 h-6 rounded-full border border-white"
+                />
+                <div
+                  class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs border border-white"
+                >
+                  +8
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 챌린지 상세 모달 -->
+    <div class="challenge-detail-container" id="challengeDetailModal">
+      <div
+        class="bg-white rounded-xl w-[340px] max-h-[600px] overflow-y-auto p-5"
+      >
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-semibold text-lg">매일 30분 운동하기</h3>
+          <button
+            class="w-8 h-8 flex items-center justify-center cursor-pointer"
+            id="closeDetailButton"
+          >
+            <i class="ri-close-line ri-lg"></i>
+          </button>
+        </div>
+        <div class="mb-4">
+          <p class="text-sm text-gray-600">2025.06.01 - 2025.06.30</p>
+          <p class="text-sm mt-2">
+            매일 30분 이상 운동하고 인증하는 챌린지입니다. 어떤 운동이든
+            상관없이 30분 이상 진행하고 인증샷을 올려주세요!
+          </p>
+          <div class="flex gap-2 mt-3">
+            <span
+              class="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full"
+              >참여자 42명</span
+            >
+            <span
+              class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full"
+              >완료 8명</span
+            >
+          </div>
+        </div>
+        <div class="mt-4">
+          <div class="flex justify-between items-center mb-3">
+            <h4 class="font-medium">참여자 인증</h4>
+            <div class="flex gap-2">
+              <button
+                class="text-xs text-primary bg-primary/10 px-2 py-1 rounded-full cursor-pointer"
+              >
+                최신순
+              </button>
+              <button
+                class="text-xs text-gray-500 px-2 py-1 rounded-full cursor-pointer"
+              >
+                인기순
+              </button>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="rounded-lg overflow-hidden cursor-pointer">
+              <img
+                src="https://readdy.ai/api/search-image?query=woman%20exercising%20at%20home%2C%20yoga%20pose%2C%20fitness%2C%20healthy%20lifestyle&width=150&height=150&seq=12&orientation=squarish"
+                alt="인증샷"
+                class="w-full h-36 object-cover"
+              />
+              <div class="p-2 bg-gray-50">
+                <p class="text-xs font-medium">김지은</p>
+                <p class="text-xs text-gray-500">오늘 요가 30분 완료!</p>
+              </div>
+            </div>
+            <div class="rounded-lg overflow-hidden cursor-pointer">
+              <img
+                src="https://readdy.ai/api/search-image?query=man%20running%20outdoors%2C%20jogging%20in%20park%2C%20fitness%20activity&width=150&height=150&seq=13&orientation=squarish"
+                alt="인증샷"
+                class="w-full h-36 object-cover"
+              />
+              <div class="p-2 bg-gray-50">
+                <p class="text-xs font-medium">박현우</p>
+                <p class="text-xs text-gray-500">러닝 5km 완료했습니다</p>
+              </div>
+            </div>
+            <div class="rounded-lg overflow-hidden cursor-pointer">
+              <img
+                src="https://readdy.ai/api/search-image?query=woman%20with%20dumbbells%2C%20home%20workout%2C%20strength%20training&width=150&height=150&seq=14&orientation=squarish"
+                alt="인증샷"
+                class="w-full h-36 object-cover"
+              />
+              <div class="p-2 bg-gray-50">
+                <p class="text-xs font-medium">이서연</p>
+                <p class="text-xs text-gray-500">오늘은 웨이트 트레이닝!</p>
+              </div>
+            </div>
+            <div class="rounded-lg overflow-hidden cursor-pointer">
+              <img
+                src="https://readdy.ai/api/search-image?query=man%20doing%20push%20ups%2C%20home%20workout%2C%20fitness&width=150&height=150&seq=15&orientation=squarish"
+                alt="인증샷"
+                class="w-full h-36 object-cover"
+              />
+              <div class="p-2 bg-gray-50">
+                <p class="text-xs font-medium">최준호</p>
+                <p class="text-xs text-gray-500">홈트레이닝 40분 완료</p>
+              </div>
+            </div>
+            <div class="rounded-lg overflow-hidden cursor-pointer">
+              <img
+                src="https://readdy.ai/api/search-image?query=woman%20on%20exercise%20bike%2C%20indoor%20cycling%2C%20cardio%20workout&width=150&height=150&seq=16&orientation=squarish"
+                alt="인증샷"
+                class="w-full h-36 object-cover"
+              />
+              <div class="p-2 bg-gray-50">
+                <p class="text-xs font-medium">정다은</p>
+                <p class="text-xs text-gray-500">실내 사이클 45분!</p>
+              </div>
+            </div>
+            <div class="rounded-lg overflow-hidden cursor-pointer">
+              <img
+                src="https://readdy.ai/api/search-image?query=man%20stretching%20after%20workout%2C%20cool%20down%20exercise&width=150&height=150&seq=17&orientation=squarish"
+                alt="인증샷"
+                class="w-full h-36 object-cover"
+              />
+              <div class="p-2 bg-gray-50">
+                <p class="text-xs font-medium">강민석</p>
+                <p class="text-xs text-gray-500">스트레칭도 운동입니다</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script id="modalControlScript">
+      document.addEventListener("DOMContentLoaded", function () {
+        const calendarButton = document.getElementById("calendarButton");
+        const calendarModal = document.getElementById("calendarModal");
+        const closeCalendarButton = document.getElementById("closeCalendarButton");
+        const viewDetailButton = document.getElementById("viewDetailButton");
+        const pastChallengeButton = document.getElementById("pastChallengeButton");
+        const challengeDetailModal = document.getElementById("challengeDetailModal");
+        const closeDetailButton = document.getElementById("closeDetailButton");
+        // 달력 모달 열기
+        calendarButton.addEventListener("click", function () {
+          calendarModal.style.display = "flex";
+        });
+        // 달력 모달 닫기
+        closeCalendarButton.addEventListener("click", function () {
+          calendarModal.style.display = "none";
+        });
+        // 챌린지 상세 모달 열기
+        viewDetailButton.addEventListener("click", function () {
+          challengeDetailModal.style.display = "flex";
+        });
+        // 이전 챌린지에서 상세 모달 열기
+        pastChallengeButton.addEventListener("click", function () {
+          challengeDetailModal.style.display = "flex";
+        });
+        // 챌린지 상세 모달 닫기
+        closeDetailButton.addEventListener("click", function () {
+          challengeDetailModal.style.display = "none";
+        });
+        // 달력의 챌린지 날짜 클릭
+        const calendarHighlights = document.querySelectorAll(".calendar-highlight");
+        calendarHighlights.forEach(function (day) {
+          day.addEventListener("click", function () {
+            challengeDetailModal.style.display = "flex";
+          });
+        });
+        // 모달 외부 클릭 시 닫기
+        window.addEventListener("click", function (event) {
+          if (event.target === calendarModal) {
+            calendarModal.style.display = "none";
+          }
+          if (event.target === challengeDetailModal) {
+            challengeDetailModal.style.display = "none";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
+

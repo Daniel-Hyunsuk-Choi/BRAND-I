@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>챌린지 피드</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#E1306C", secondary: "#FCAF45" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+          font-family: 'Noto Sans KR', sans-serif;
+      }
+      .feed-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 2px;
+      }
+      .carousel-container {
+          position: relative;
+          overflow: hidden;
+      }
+      .carousel {
+          display: flex;
+          transition: transform 0.3s ease-in-out;
+      }
+      .carousel-item {
+          flex: 0 0 100%;
+      }
+      .carousel-indicators {
+          position: absolute;
+          bottom: 10px;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          gap: 4px;
+      }
+      .indicator {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background-color: rgba(255, 255, 255, 0.5);
+      }
+      .indicator.active {
+          background-color: white;
+      }
+      .modal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: white;
+          z-index: 50;
+          transform: translateY(100%);
+          transition: transform 0.3s ease-in-out;
+          overflow-y: auto;
+      }
+      .modal.active {
+          transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body class="bg-white text-gray-900">
+    <!-- 네비게이션 바 -->
+    <nav
+      class="fixed top-0 w-full bg-white border-b border-gray-100 z-10 px-4 py-3"
+    >
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-['Pacifico'] text-primary">logo</h1>
+        <div class="relative w-full max-w-[200px] ml-4">
+          <input
+            type="text"
+            placeholder="검색"
+            class="w-full bg-gray-100 rounded-full text-sm py-1.5 pl-8 pr-4 border-none focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+          <div
+            class="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-4 h-4 flex items-center justify-center text-gray-500"
+          >
+            <i class="ri-search-line"></i>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="pt-16 pb-16">
+      <!-- 카테고리 선택 -->
+      <div class="overflow-x-auto px-4 py-3 whitespace-nowrap">
+        <div class="flex space-x-3">
+          <button
+            class="px-4 py-1.5 bg-primary text-white rounded-full text-sm font-medium"
+          >
+            전체
+          </button>
+          <button
+            class="px-4 py-1.5 bg-gray-100 rounded-full text-sm font-medium"
+          >
+            요리
+          </button>
+          <button
+            class="px-4 py-1.5 bg-gray-100 rounded-full text-sm font-medium"
+          >
+            스포츠
+          </button>
+          <button
+            class="px-4 py-1.5 bg-gray-100 rounded-full text-sm font-medium"
+          >
+            음악
+          </button>
+          <button
+            class="px-4 py-1.5 bg-gray-100 rounded-full text-sm font-medium"
+          >
+            사진
+          </button>
+          <button
+            class="px-4 py-1.5 bg-gray-100 rounded-full text-sm font-medium"
+          >
+            미술
+          </button>
+          <button
+            class="px-4 py-1.5 bg-gray-100 rounded-full text-sm font-medium"
+          >
+            여행
+          </button>
+          <button
+            class="px-4 py-1.5 bg-gray-100 rounded-full text-sm font-medium"
+          >
+            기타
+          </button>
+        </div>
+      </div>
+
+      <!-- 피드 그리드 -->
+      <div class="feed-grid mt-2">
+        <!-- 피드 아이템 1 -->
+        <div class="feed-item cursor-pointer" data-id="1">
+          <div class="relative pb-[100%]">
+            <img
+              src="https://readdy.ai/api/search-image?query=a%20person%20cooking%20a%20delicious%20Korean%20dish%2C%20top%20view%2C%20vibrant%20colors%2C%20food%20photography%20style%2C%20detailed%20ingredients%2C%20soft%20natural%20lighting&width=400&height=400&seq=1&orientation=squarish"
+              alt="요리 챌린지"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+            <div
+              class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2"
+            >
+              <div class="flex items-center">
+                <div class="w-6 h-6 rounded-full overflow-hidden mr-1.5">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=Korean%20cooking%20class%20logo%2C%20minimalist%20design%2C%20food%20icon%2C%20professional%20branding&width=100&height=100&seq=2&orientation=squarish"
+                    alt="요리방"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <span class="text-white text-xs font-medium"
+                  >#30일요리챌린지</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 피드 아이템 2 -->
+        <div class="feed-item cursor-pointer" data-id="2">
+          <div class="relative pb-[100%]">
+            <img
+              src="https://readdy.ai/api/search-image?query=person%20playing%20guitar%2C%20artistic%20shot%2C%20moody%20lighting%2C%20music%20performance%2C%20detailed%20instrument%2C%20passionate%20expression&width=400&height=400&seq=3&orientation=squarish"
+              alt="음악 챌린지"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+            <div
+              class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2"
+            >
+              <div class="flex items-center">
+                <div class="w-6 h-6 rounded-full overflow-hidden mr-1.5">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=music%20practice%20logo%2C%20guitar%20icon%2C%20minimalist%20design%2C%20music%20education%20branding&width=100&height=100&seq=4&orientation=squarish"
+                    alt="음악방"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <span class="text-white text-xs font-medium"
+                  >#매일기타연습</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 피드 아이템 3 -->
+        <div class="feed-item cursor-pointer" data-id="3">
+          <div class="relative pb-[100%]">
+            <img
+              src="https://readdy.ai/api/search-image?query=person%20running%20in%20park%2C%20athletic%20wear%2C%20dynamic%20pose%2C%20fitness%20activity%2C%20morning%20light%2C%20healthy%20lifestyle&width=400&height=400&seq=5&orientation=squarish"
+              alt="스포츠 챌린지"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+            <div
+              class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2"
+            >
+              <div class="flex items-center">
+                <div class="w-6 h-6 rounded-full overflow-hidden mr-1.5">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=running%20club%20logo%2C%20minimalist%20design%2C%20fitness%20icon%2C%20sports%20branding&width=100&height=100&seq=6&orientation=squarish"
+                    alt="러닝방"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <span class="text-white text-xs font-medium">#매일5km러닝</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 피드 아이템 4 -->
+        <div class="feed-item cursor-pointer" data-id="4">
+          <div class="relative pb-[100%]">
+            <img
+              src="https://readdy.ai/api/search-image?query=artistic%20painting%20process%2C%20close-up%20of%20canvas%20and%20brush%2C%20vibrant%20colors%2C%20creative%20workspace%2C%20art%20materials&width=400&height=400&seq=7&orientation=squarish"
+              alt="미술 챌린지"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+            <div
+              class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2"
+            >
+              <div class="flex items-center">
+                <div class="w-6 h-6 rounded-full overflow-hidden mr-1.5">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=art%20studio%20logo%2C%20paint%20brush%20icon%2C%20minimalist%20design%2C%20creative%20branding&width=100&height=100&seq=8&orientation=squarish"
+                    alt="미술방"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <span class="text-white text-xs font-medium"
+                  >#100일그림챌린지</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 피드 아이템 5 -->
+        <div class="feed-item cursor-pointer" data-id="5">
+          <div class="relative pb-[100%]">
+            <img
+              src="https://readdy.ai/api/search-image?query=scenic%20landscape%20photography%2C%20beautiful%20sunset%20over%20mountains%2C%20travel%20photography%2C%20vibrant%20colors%2C%20wide%20angle%20shot&width=400&height=400&seq=9&orientation=squarish"
+              alt="여행 챌린지"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+            <div
+              class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2"
+            >
+              <div class="flex items-center">
+                <div class="w-6 h-6 rounded-full overflow-hidden mr-1.5">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=travel%20photography%20logo%2C%20camera%20icon%2C%20minimalist%20design%2C%20adventure%20branding&width=100&height=100&seq=10&orientation=squarish"
+                    alt="여행방"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <span class="text-white text-xs font-medium"
+                  >#주말여행사진</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 피드 아이템 6 -->
+        <div class="feed-item cursor-pointer" data-id="6">
+          <div class="relative pb-[100%]">
+            <img
+              src="https://readdy.ai/api/search-image?query=person%20taking%20photo%20with%20professional%20camera%2C%20photography%20in%20action%2C%20urban%20setting%2C%20creative%20angle&width=400&height=400&seq=11&orientation=squarish"
+              alt="사진 챌린지"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+            <div
+              class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2"
+            >
+              <div class="flex items-center">
+                <div class="w-6 h-6 rounded-full overflow-hidden mr-1.5">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=photography%20club%20logo%2C%20camera%20icon%2C%20minimalist%20design%2C%20photo%20community%20branding&width=100&height=100&seq=12&orientation=squarish"
+                    alt="사진방"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <span class="text-white text-xs font-medium"
+                  >#일상사진챌린지</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 피드 아이템 7 -->
+        <div class="feed-item cursor-pointer" data-id="7">
+          <div class="relative pb-[100%]">
+            <img
+              src="https://readdy.ai/api/search-image?query=healthy%20meal%20preparation%2C%20colorful%20vegetables%20and%20ingredients%2C%20cooking%20process%2C%20top%20view%2C%20clean%20eating&width=400&height=400&seq=13&orientation=squarish"
+              alt="요리 챌린지"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+            <div
+              class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2"
+            >
+              <div class="flex items-center">
+                <div class="w-6 h-6 rounded-full overflow-hidden mr-1.5">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=healthy%20cooking%20logo%2C%20salad%20icon%2C%20minimalist%20design%2C%20nutrition%20branding&width=100&height=100&seq=14&orientation=squarish"
+                    alt="건강식방"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <span class="text-white text-xs font-medium"
+                  >#건강식챌린지</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 피드 아이템 8 -->
+        <div class="feed-item cursor-pointer" data-id="8">
+          <div class="relative pb-[100%]">
+            <img
+              src="https://readdy.ai/api/search-image?query=yoga%20practice%20in%20beautiful%20setting%2C%20person%20in%20yoga%20pose%2C%20wellness%20activity%2C%20peaceful%20environment%2C%20morning%20light&width=400&height=400&seq=15&orientation=squarish"
+              alt="요가 챌린지"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+            <div
+              class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2"
+            >
+              <div class="flex items-center">
+                <div class="w-6 h-6 rounded-full overflow-hidden mr-1.5">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=yoga%20studio%20logo%2C%20yoga%20pose%20icon%2C%20minimalist%20design%2C%20wellness%20branding&width=100&height=100&seq=16&orientation=squarish"
+                    alt="요가방"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <span class="text-white text-xs font-medium"
+                  >#아침요가챌린지</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 피드 아이템 9 -->
+        <div class="feed-item cursor-pointer" data-id="9">
+          <div class="relative pb-[100%]">
+            <img
+              src="https://readdy.ai/api/search-image?query=reading%20book%20in%20cozy%20setting%2C%20person%20with%20coffee%20and%20book%2C%20literature%20moment%2C%20warm%20lighting%2C%20comfortable%20space&width=400&height=400&seq=17&orientation=squarish"
+              alt="독서 챌린지"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+            <div
+              class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2"
+            >
+              <div class="flex items-center">
+                <div class="w-6 h-6 rounded-full overflow-hidden mr-1.5">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=book%20club%20logo%2C%20open%20book%20icon%2C%20minimalist%20design%2C%20reading%20community%20branding&width=100&height=100&seq=18&orientation=squarish"
+                    alt="독서방"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <span class="text-white text-xs font-medium"
+                  >#매일30분독서</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 게시물 상세 모달 -->
+    <div class="modal" id="postModal">
+      <div class="relative">
+        <!-- 상단 헤더 -->
+        <div
+          class="sticky top-0 bg-white border-b border-gray-100 z-10 px-4 py-3"
+        >
+          <div class="flex items-center">
+            <button
+              id="backButton"
+              class="w-8 h-8 flex items-center justify-center mr-2 cursor-pointer"
+            >
+              <i class="ri-arrow-left-line text-xl"></i>
+            </button>
+            <div class="flex items-center flex-1">
+              <div class="w-8 h-8 rounded-full overflow-hidden mr-2">
+                <img
+                  id="modalProfileImg"
+                  src=""
+                  alt="프로필"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <span id="modalUsername" class="font-medium"></span>
+            </div>
+            <button
+              class="w-8 h-8 flex items-center justify-center cursor-pointer"
+            >
+              <i class="ri-more-line text-xl"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 이미지 캐러셀 -->
+        <div class="carousel-container">
+          <div class="carousel" id="postCarousel">
+            <!-- 이미지는 JS로 동적 추가 -->
+          </div>
+          <div class="carousel-indicators" id="carouselIndicators">
+            <!-- 인디케이터는 JS로 동적 추가 -->
+          </div>
+        </div>
+
+        <!-- 액션 버튼 -->
+        <div class="px-4 py-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+              <button
+                class="w-8 h-8 flex items-center justify-center cursor-pointer"
+              >
+                <i class="ri-heart-line text-2xl"></i>
+              </button>
+              <button
+                class="w-8 h-8 flex items-center justify-center cursor-pointer"
+              >
+                <i class="ri-chat-1-line text-2xl"></i>
+              </button>
+              <button
+                class="w-8 h-8 flex items-center justify-center cursor-pointer"
+              >
+                <i class="ri-share-forward-line text-2xl"></i>
+              </button>
+            </div>
+            <button
+              class="w-8 h-8 flex items-center justify-center cursor-pointer"
+            >
+              <i class="ri-bookmark-line text-2xl"></i>
+            </button>
+          </div>
+          <div class="mt-2">
+            <p class="font-medium" id="modalLikes">좋아요 0개</p>
+          </div>
+        </div>
+
+        <!-- 게시물 내용 -->
+        <div class="px-4 pb-3 border-b border-gray-100">
+          <div class="flex items-start">
+            <span class="font-medium mr-2" id="modalContentUsername"></span>
+            <div class="flex-1">
+              <p id="modalContent"></p>
+              <div class="mt-1">
+                <a
+                  href="#"
+                  class="text-primary font-medium"
+                  id="modalChallengeName"
+                ></a>
+                <span
+                  class="text-primary font-medium ml-1"
+                  id="modalChallengeTag"
+                ></span>
+              </div>
+              <p class="text-gray-500 text-xs mt-2" id="modalTime"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 댓글 섹션 -->
+        <div class="px-4 py-3">
+          <p class="text-gray-500 font-medium mb-4">댓글 보기</p>
+          <div class="space-y-4" id="commentsContainer">
+            <!-- 댓글은 JS로 동적 추가 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 댓글 입력 -->
+      <div
+        class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 py-3"
+      >
+        <div class="flex items-center">
+          <div class="w-8 h-8 rounded-full overflow-hidden mr-2">
+            <img
+              src="https://readdy.ai/api/search-image?query=professional%20profile%20picture%2C%20neutral%20background%2C%20Korean%20person%2C%20headshot%2C%20clean%20portrait&width=100&height=100&seq=19&orientation=squarish"
+              alt="내 프로필"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <input
+            type="text"
+            placeholder="댓글 달기..."
+            class="flex-1 bg-gray-100 rounded-full text-sm py-2 px-4 border-none focus:outline-none focus:ring-1 focus:ring-primary mr-2"
+          />
+          <button class="text-primary font-medium">게시</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 하단 네비게이션 바 -->
+    <nav class="fixed bottom-0 w-full bg-white border-t border-gray-100 z-10">
+      <div class="grid grid-cols-4 h-14">
+        <a
+          href="#"
+          class="flex flex-col items-center justify-center text-primary"
+        >
+          <div class="w-6 h-6 flex items-center justify-center">
+            <i class="ri-compass-fill text-xl"></i>
+          </div>
+          <span class="text-xs mt-0.5">탐색</span>
+        </a>
+        <a
+          href="#"
+          class="flex flex-col items-center justify-center text-gray-500"
+        >
+          <div class="w-6 h-6 flex items-center justify-center">
+            <i class="ri-add-circle-line text-xl"></i>
+          </div>
+          <span class="text-xs mt-0.5">만들기</span>
+        </a>
+        <a
+          href="#"
+          class="flex flex-col items-center justify-center text-gray-500"
+        >
+          <div class="w-6 h-6 flex items-center justify-center">
+            <i class="ri-trophy-line text-xl"></i>
+          </div>
+          <span class="text-xs mt-0.5">챌린지</span>
+        </a>
+        <a
+          href="#"
+          class="flex flex-col items-center justify-center text-gray-500"
+        >
+          <div class="w-6 h-6 flex items-center justify-center">
+            <i class="ri-user-line text-xl"></i>
+          </div>
+          <span class="text-xs mt-0.5">프로필</span>
+        </a>
+      </div>
+    </nav>
+
+    <script id="feedInteractionScript">
+      document.addEventListener("DOMContentLoaded", function () {
+        const feedItems = document.querySelectorAll(".feed-item");
+        const modal = document.getElementById("postModal");
+        const backButton = document.getElementById("backButton");
+        const carousel = document.getElementById("postCarousel");
+        const indicators = document.getElementById("carouselIndicators");
+
+        // 게시물 데이터
+        const posts = {
+          1: {
+            username: "김요리사",
+            profileImg:
+              "https://readdy.ai/api/search-image?query=Korean%20chef%20profile%20picture%2C%20professional%2C%20smiling%2C%20kitchen%20background&width=100&height=100&seq=20&orientation=squarish",
+            images: [
+              "https://readdy.ai/api/search-image?query=homemade%20Korean%20bibimbap%20preparation%2C%20colorful%20vegetables%20arranged%20in%20bowl%2C%20top%20view%2C%20food%20photography%2C%20bright%20natural%20lighting&width=400&height=400&seq=21&orientation=squarish",
+              "https://readdy.ai/api/search-image?query=cooking%20process%20of%20Korean%20dish%2C%20ingredients%20preparation%2C%20chef%20hands%20working%2C%20detailed%20food%20styling&width=400&height=400&seq=22&orientation=squarish",
+            ],
+            likes: 128,
+            content:
+              "오늘의 비빔밥 완성! 30일 요리 챌린지 15일차, 건강한 한식 만들기에 도전 중입니다. 여러분도 함께해요!",
+            challengeName: "요리방",
+            challengeTag: "#30일요리챌린지",
+            time: "2시간 전",
+            comments: [
+              {
+                username: "맛있는하루",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=Korean%20female%20profile%20picture%2C%20casual%20style%2C%20friendly%20smile&width=100&height=100&seq=23&orientation=squarish",
+                content: "와 정말 맛있어 보여요! 레시피 공유 부탁드려요~",
+                time: "1시간 전",
+              },
+              {
+                username: "요리초보자",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=young%20Korean%20male%20profile%20picture%2C%20casual%20look%2C%20urban%20background&width=100&height=100&seq=24&orientation=squarish",
+                content: "저도 이 챌린지 참여 중인데 정말 영감을 받았어요!",
+                time: "30분 전",
+              },
+            ],
+          },
+          2: {
+            username: "기타마스터",
+            profileImg:
+              "https://readdy.ai/api/search-image?query=Korean%20musician%20profile%20picture%2C%20artistic%20style%2C%20playing%20guitar&width=100&height=100&seq=25&orientation=squarish",
+            images: [
+              "https://readdy.ai/api/search-image?query=person%20playing%20acoustic%20guitar%2C%20close-up%20of%20hands%20on%20strings%2C%20moody%20lighting%2C%20music%20performance&width=400&height=400&seq=26&orientation=squarish",
+              "https://readdy.ai/api/search-image?query=guitar%20practice%20setup%2C%20music%20sheets%2C%20home%20studio%20environment%2C%20cozy%20atmosphere&width=400&height=400&seq=27&orientation=squarish",
+            ],
+            likes: 95,
+            content:
+              "오늘도 30분 기타 연습 완료! 처음보다 손가락이 훨씬 유연해진 것 같아요. 매일 조금씩 성장하는 기분이 정말 좋네요.",
+            challengeName: "음악방",
+            challengeTag: "#매일기타연습",
+            time: "5시간 전",
+            comments: [
+              {
+                username: "음악애호가",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=Korean%20person%20with%20headphones%20profile%20picture%2C%20music%20enthusiast&width=100&height=100&seq=28&orientation=squarish",
+                content: "연습하는 모습이 멋져요! 어떤 곡을 연습 중이신가요?",
+                time: "3시간 전",
+              },
+              {
+                username: "기타초보",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=young%20Korean%20person%20profile%20picture%2C%20casual%20style%2C%20indoor%20setting&width=100&height=100&seq=29&orientation=squarish",
+                content: "저도 도전해보고 싶어요! 초보자에게 추천하는 곡이 있을까요?",
+                time: "1시간 전",
+              },
+            ],
+          },
+          3: {
+            username: "러닝러버",
+            profileImg:
+              "https://readdy.ai/api/search-image?query=athletic%20Korean%20person%20profile%20picture%2C%20running%20outfit%2C%20outdoor%20setting&width=100&height=100&seq=30&orientation=squarish",
+            images: [
+              "https://readdy.ai/api/search-image?query=person%20running%20in%20park%2C%20morning%20light%2C%20athletic%20wear%2C%20fitness%20activity%2C%20dynamic%20pose&width=400&height=400&seq=31&orientation=squarish",
+              "https://readdy.ai/api/search-image?query=running%20route%20map%2C%20fitness%20tracking%20app%20screenshot%2C%20achievement%20statistics&width=400&height=400&seq=32&orientation=squarish",
+            ],
+            likes: 156,
+            content:
+              "오늘 5km 러닝 완료! 날씨가 정말 좋아서 평소보다 더 상쾌했어요. 러닝 챌린지 20일차, 절반을 넘었네요!",
+            challengeName: "러닝방",
+            challengeTag: "#매일5km러닝",
+            time: "8시간 전",
+            comments: [
+              {
+                username: "건강지킴이",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=fit%20Korean%20person%20profile%20picture%2C%20sports%20attire%2C%20outdoor%20background&width=100&height=100&seq=33&orientation=squarish",
+                content: "대단해요! 저도 오늘 러닝했는데 정말 날씨가 좋더라구요.",
+                time: "6시간 전",
+              },
+              {
+                username: "운동초보",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=young%20Korean%20person%20profile%20picture%2C%20casual%20style%2C%20smiling&width=100&height=100&seq=34&orientation=squarish",
+                content: "5km를 매일 뛰다니 정말 존경스러워요! 어떻게 시작하셨나요?",
+                time: "4시간 전",
+              },
+            ],
+          },
+          4: {
+            username: "그림쟁이",
+            profileImg:
+              "https://readdy.ai/api/search-image?query=artistic%20Korean%20person%20profile%20picture%2C%20paint%20brushes%2C%20creative%20studio&width=100&height=100&seq=35&orientation=squarish",
+            images: [
+              "https://readdy.ai/api/search-image?query=watercolor%20painting%20in%20progress%2C%20artistic%20workspace%2C%20paint%20palette%2C%20brushes%2C%20creative%20process&width=400&height=400&seq=36&orientation=squarish",
+              "https://readdy.ai/api/search-image?query=completed%20watercolor%20artwork%2C%20nature%20scene%2C%20vibrant%20colors%2C%20artistic%20style&width=400&height=400&seq=37&orientation=squarish",
+            ],
+            likes: 203,
+            content:
+              "100일 그림 챌린지 42일차! 오늘은 수채화로 풍경화에 도전해봤어요. 아직 많이 부족하지만 조금씩 나아지고 있는 것 같아요.",
+            challengeName: "미술방",
+            challengeTag: "#100일그림챌린지",
+            time: "1일 전",
+            comments: [
+              {
+                username: "예술가희망",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=creative%20Korean%20person%20profile%20picture%2C%20artistic%20background%2C%20casual%20style&width=100&height=100&seq=38&orientation=squarish",
+                content: "와 정말 아름다워요! 어떤 물감을 사용하셨나요?",
+                time: "20시간 전",
+              },
+              {
+                username: "그림사랑",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=Korean%20art%20student%20profile%20picture%2C%20creative%20style%2C%20indoor%20setting&width=100&height=100&seq=39&orientation=squarish",
+                content: "색감이 정말 예뻐요! 42일만에 이 정도면 대단하세요.",
+                time: "15시간 전",
+              },
+            ],
+          },
+          5: {
+            username: "여행작가",
+            profileImg:
+              "https://readdy.ai/api/search-image?query=Korean%20travel%20blogger%20profile%20picture%2C%20outdoor%20adventure%2C%20backpack&width=100&height=100&seq=40&orientation=squarish",
+            images: [
+              "https://readdy.ai/api/search-image?query=scenic%20Korean%20mountain%20landscape%2C%20beautiful%20sunset%2C%20travel%20photography%2C%20vibrant%20colors&width=400&height=400&seq=41&orientation=squarish",
+              "https://readdy.ai/api/search-image?query=traditional%20Korean%20temple%20in%20mountains%2C%20architectural%20details%2C%20travel%20photography&width=400&height=400&seq=42&orientation=squarish",
+              "https://readdy.ai/api/search-image?query=hiker%20on%20mountain%20trail%2C%20panoramic%20view%2C%20adventure%20photography%2C%20Korean%20landscape&width=400&height=400&seq=43&orientation=squarish",
+            ],
+            likes: 278,
+            content:
+              "이번 주말 설악산 여행! 정말 아름다운 풍경에 힐링되는 시간이었어요. 주말마다 새로운 곳을 방문하는 챌린지 중입니다.",
+            challengeName: "여행방",
+            challengeTag: "#주말여행사진",
+            time: "2일 전",
+            comments: [
+              {
+                username: "여행꿈나무",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=young%20Korean%20traveler%20profile%20picture%2C%20outdoor%20setting%2C%20casual%20style&width=100&height=100&seq=44&orientation=squarish",
+                content: "와 정말 멋진 풍경이네요! 어느 코스로 등산하셨나요?",
+                time: "1일 전",
+              },
+              {
+                username: "산사랑",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=Korean%20hiker%20profile%20picture%2C%20mountain%20background%2C%20outdoor%20gear&width=100&height=100&seq=45&orientation=squarish",
+                content: "설악산 단풍이 절정이네요! 저도 이번 주말에 가볼까 합니다.",
+                time: "1일 전",
+              },
+            ],
+          },
+          6: {
+            username: "사진작가",
+            profileImg:
+              "https://readdy.ai/api/search-image?query=Korean%20photographer%20profile%20picture%2C%20with%20camera%2C%20artistic%20style&width=100&height=100&seq=46&orientation=squarish",
+            images: [
+              "https://readdy.ai/api/search-image?query=street%20photography%20in%20Seoul%2C%20urban%20life%2C%20black%20and%20white%2C%20artistic%20composition&width=400&height=400&seq=47&orientation=squarish",
+              "https://readdy.ai/api/search-image?query=close-up%20portrait%20photography%2C%20emotional%20expression%2C%20dramatic%20lighting%2C%20artistic%20style&width=400&height=400&seq=48&orientation=squarish",
+            ],
+            likes: 187,
+            content:
+              "오늘의 일상 사진 챌린지! 서울 거리의 모습과 만난 사람들의 표정을 담아봤어요. 매일 카메라를 들고 나가는 습관이 생겼네요.",
+            challengeName: "사진방",
+            challengeTag: "#일상사진챌린지",
+            time: "3일 전",
+            comments: [
+              {
+                username: "사진애호가",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=Korean%20photography%20enthusiast%20profile%20picture%2C%20with%20vintage%20camera&width=100&height=100&seq=49&orientation=squarish",
+                content: "흑백 사진의 감성이 정말 좋네요! 어떤 카메라 사용하시나요?",
+                time: "2일 전",
+              },
+              {
+                username: "포토그래퍼",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=professional%20Korean%20photographer%20profile%20picture%2C%20studio%20setting&width=100&height=100&seq=50&orientation=squarish",
+                content:
+                  "구도가 정말 멋져요! 특히 두 번째 사진의 포커싱이 인상적입니다.",
+                time: "1일 전",
+              },
+            ],
+          },
+          7: {
+            username: "건강요리사",
+            profileImg:
+              "https://readdy.ai/api/search-image?query=Korean%20nutritionist%20profile%20picture%2C%20healthy%20food%2C%20kitchen%20setting&width=100&height=100&seq=51&orientation=squarish",
+            images: [
+              "https://readdy.ai/api/search-image?query=healthy%20Korean%20meal%20prep%2C%20various%20vegetables%20and%20proteins%2C%20organized%20containers%2C%20clean%20eating&width=400&height=400&seq=52&orientation=squarish",
+              "https://readdy.ai/api/search-image?query=nutritious%20salad%20bowl%2C%20colorful%20vegetables%2C%20healthy%20protein%2C%20food%20photography&width=400&height=400&seq=53&orientation=squarish",
+            ],
+            likes: 142,
+            content:
+              "이번 주 건강식 챌린지! 일주일 치 식단을 준비했어요. 바쁜 일상에서도 건강한 식습관을 유지하는 것이 목표입니다.",
+            challengeName: "건강식방",
+            challengeTag: "#건강식챌린지",
+            time: "4일 전",
+            comments: [
+              {
+                username: "건강지킴이",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=fit%20Korean%20person%20profile%20picture%2C%20health%20conscious%2C%20casual%20style&width=100&height=100&seq=54&orientation=squarish",
+                content: "정말 알찬 식단이네요! 보관은 어떻게 하시나요?",
+                time: "3일 전",
+              },
+              {
+                username: "요리초보",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=young%20Korean%20person%20profile%20picture%2C%20kitchen%20background%2C%20casual%20style&width=100&height=100&seq=55&orientation=squarish",
+                content: "저도 도전해보고 싶어요! 초보자를 위한 팁 있을까요?",
+                time: "2일 전",
+              },
+            ],
+          },
+          8: {
+            username: "요가마스터",
+            profileImg:
+              "https://readdy.ai/api/search-image?query=Korean%20yoga%20instructor%20profile%20picture%2C%20yoga%20pose%2C%20wellness%20setting&width=100&height=100&seq=56&orientation=squarish",
+            images: [
+              "https://readdy.ai/api/search-image?query=morning%20yoga%20practice%2C%20person%20in%20warrior%20pose%2C%20sunrise%20lighting%2C%20peaceful%20environment&width=400&height=400&seq=57&orientation=squarish",
+              "https://readdy.ai/api/search-image?query=meditation%20practice%2C%20serene%20environment%2C%20mindfulness%20moment%2C%20soft%20lighting&width=400&height=400&seq=58&orientation=squarish",
+            ],
+            likes: 165,
+            content:
+              "아침 요가 챌린지 25일차! 매일 아침 요가로 하루를 시작하니 몸과 마음이 정말 달라지는 것을 느껴요. 여러분도 함께해요!",
+            challengeName: "요가방",
+            challengeTag: "#아침요가챌린지",
+            time: "5일 전",
+            comments: [
+              {
+                username: "요가초보",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=Korean%20beginner%20yoga%20practitioner%20profile%20picture%2C%20casual%20style&width=100&height=100&seq=59&orientation=squarish",
+                content: "정말 멋져요! 초보자도 따라할 수 있는 동작 추천해주세요.",
+                time: "4일 전",
+              },
+              {
+                username: "건강생활",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=health%20conscious%20Korean%20person%20profile%20picture%2C%20active%20lifestyle&width=100&height=100&seq=60&orientation=squarish",
+                content: "저도 이 챌린지 참여 중인데 정말 변화가 느껴져요!",
+                time: "3일 전",
+              },
+            ],
+          },
+          9: {
+            username: "책벌레",
+            profileImg:
+              "https://readdy.ai/api/search-image?query=Korean%20book%20lover%20profile%20picture%2C%20reading%20glasses%2C%20library%20background&width=100&height=100&seq=61&orientation=squarish",
+            images: [
+              "https://readdy.ai/api/search-image?query=cozy%20reading%20nook%2C%20person%20with%20book%20and%20tea%2C%20comfortable%20armchair%2C%20warm%20lighting&width=400&height=400&seq=62&orientation=squarish",
+              "https://readdy.ai/api/search-image?query=stack%20of%20books%2C%20reading%20journal%2C%20bookmark%2C%20literature%20collection&width=400&height=400&seq=63&orientation=squarish",
+            ],
+            likes: 118,
+            content:
+              "매일 30분 독서 챌린지 18일차! 오늘은 김영하 작가의 소설을 읽었어요. 매일 조금씩 읽다 보니 한 달에 한 권씩 완독하게 되네요.",
+            challengeName: "독서방",
+            challengeTag: "#매일30분독서",
+            time: "6일 전",
+            comments: [
+              {
+                username: "문학청년",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=young%20Korean%20literature%20enthusiast%20profile%20picture%2C%20bookstore%20setting&width=100&height=100&seq=64&orientation=squarish",
+                content: "김영하 작가 좋아해요! 어떤 작품 읽고 계신가요?",
+                time: "5일 전",
+              },
+              {
+                username: "독서모임장",
+                profileImg:
+                  "https://readdy.ai/api/search-image?query=Korean%20book%20club%20leader%20profile%20picture%2C%20professional%20style%2C%20library%20background&width=100&height=100&seq=65&orientation=squarish",
+                content: "매일 독서하는 습관이 정말 중요하죠. 응원합니다!",
+                time: "4일 전",
+              },
+            ],
+          },
+        };
+
+        // 피드 아이템 클릭 이벤트
+        feedItems.forEach((item) => {
+          item.addEventListener("click", function () {
+            const postId = this.getAttribute("data-id");
+            const post = posts[postId];
+
+            if (post) {
+              // 모달 내용 채우기
+              document.getElementById("modalProfileImg").src = post.profileImg;
+              document.getElementById("modalUsername").textContent = post.username;
+              document.getElementById("modalContentUsername").textContent =
+                post.username;
+              document.getElementById("modalContent").textContent = post.content;
+              document.getElementById("modalChallengeName").textContent =
+                post.challengeName;
+              document.getElementById("modalChallengeTag").textContent =
+                post.challengeTag;
+              document.getElementById("modalTime").textContent = post.time;
+              document.getElementById("modalLikes").textContent =
+                `좋아요 ${post.likes}개`;
+
+              // 이미지 캐러셀 생성
+              carousel.innerHTML = "";
+              indicators.innerHTML = "";
+
+              post.images.forEach((img, index) => {
+                // 이미지 추가
+                const carouselItem = document.createElement("div");
+                carouselItem.className = "carousel-item";
+                carouselItem.innerHTML = `<img src="${img}" alt="게시물 이미지" class="w-full aspect-square object-cover">`;
+                carousel.appendChild(carouselItem);
+
+                // 인디케이터 추가
+                const indicator = document.createElement("div");
+                indicator.className = `indicator ${index === 0 ? "active" : ""}`;
+                indicators.appendChild(indicator);
+              });
+
+              // 댓글 생성
+              const commentsContainer = document.getElementById("commentsContainer");
+              commentsContainer.innerHTML = "";
+
+              post.comments.forEach((comment) => {
+                const commentEl = document.createElement("div");
+                commentEl.className = "flex items-start";
+                commentEl.innerHTML = `
+                                      <div class="w-8 h-8 rounded-full overflow-hidden mr-2">
+                                          <img src="${comment.profileImg}" alt="${comment.username}" class="w-full h-full object-cover">
+                                      </div>
+                                      <div class="flex-1">
+                                          <p><span class="font-medium">${comment.username}</span> ${comment.content}</p>
+                                          <p class="text-gray-500 text-xs mt-1">${comment.time}</p>
+                                      </div>
+                                  `;
+                commentsContainer.appendChild(commentEl);
+              });
+
+              // 모달 표시
+              modal.classList.add("active");
+            }
+          });
+        });
+
+        // 뒤로가기 버튼
+        backButton.addEventListener("click", function () {
+          modal.classList.remove("active");
+        });
+
+        // 캐러셀 기능
+        let currentSlide = 0;
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        carousel.addEventListener("touchstart", function (e) {
+          touchStartX = e.touches[0].clientX;
+        });
+
+        carousel.addEventListener("touchend", function (e) {
+          touchEndX = e.changedTouches[0].clientX;
+          handleSwipe();
+        });
+
+        function handleSwipe() {
+          const indicators = document.querySelectorAll(".indicator");
+          if (indicators.length <= 1) return;
+
+          if (touchStartX - touchEndX > 50) {
+            // 왼쪽으로 스와이프
+            if (currentSlide < indicators.length - 1) {
+              currentSlide++;
+              updateCarousel();
+            }
+          } else if (touchEndX - touchStartX > 50) {
+            // 오른쪽으로 스와이프
+            if (currentSlide > 0) {
+              currentSlide--;
+              updateCarousel();
+            }
+          }
+        }
+
+        function updateCarousel() {
+          carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+          const indicators = document.querySelectorAll(".indicator");
+          indicators.forEach((indicator, index) => {
+            if (index === currentSlide) {
+              indicator.classList.add("active");
+            } else {
+              indicator.classList.remove("active");
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
+
