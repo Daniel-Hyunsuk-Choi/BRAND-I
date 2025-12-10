@@ -1,0 +1,255 @@
+// 상태 관리
+let currentQuestion = 0;
+let shuffledQuestions = [];
+let scores = {
+    SD: { S: 0, D: 0 },
+    CA: { C: 0, A: 0 },
+    GE: { G: 0, E: 0 }
+};
+
+// Fisher-Yates 셔플 알고리즘
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
+// 질문 셔플 (같은 축의 질문이 연속으로 나오지 않도록)
+function shuffleQuestions() {
+    // 각 축별로 질문 분류
+    const sdQuestions = questions.filter(q => q.axis === 'SD');
+    const caQuestions = questions.filter(q => q.axis === 'CA');
+    const geQuestions = questions.filter(q => q.axis === 'GE');
+
+    // 각 축 내에서 셔플
+    const shuffledSD = shuffleArray(sdQuestions);
+    const shuffledCA = shuffleArray(caQuestions);
+    const shuffledGE = shuffleArray(geQuestions);
+
+    // 교차 배치: SD, CA, GE, SD, CA, GE, SD, CA, GE
+    const result = [];
+    for (let i = 0; i < 3; i++) {
+        result.push(shuffledSD[i]);
+        result.push(shuffledCA[i]);
+        result.push(shuffledGE[i]);
+    }
+
+    return result;
+}
+
+// 페이지 전환 함수
+function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+    });
+    document.getElementById(pageId).classList.add('active');
+}
+
+// 테스트 시작
+function startTest() {
+    currentQuestion = 0;
+    scores = {
+        SD: { S: 0, D: 0 },
+        CA: { C: 0, A: 0 },
+        GE: { G: 0, E: 0 }
+    };
+    // 질문 셔플
+    shuffledQuestions = shuffleQuestions();
+    showPage('question-page');
+    displayQuestion();
+}
+
+// 질문 표시
+function displayQuestion() {
+    const question = shuffledQuestions[currentQuestion];
+
+    // 진행률 업데이트
+    const progress = ((currentQuestion) / shuffledQuestions.length) * 100;
+    document.getElementById('progress-fill').style.width = `${progress}%`;
+
+    // 질문 번호
+    document.getElementById('question-number').textContent = `Q${currentQuestion + 1}`;
+
+    // 질문 텍스트
+    document.getElementById('question-text').textContent = question.text;
+
+    // 옵션 텍스트
+    document.getElementById('option-a-text').textContent = question.optionA.text;
+    document.getElementById('option-b-text').textContent = question.optionB.text;
+
+    // 애니메이션 리셋
+    const optionBtns = document.querySelectorAll('.option-btn');
+    optionBtns.forEach(btn => {
+        btn.classList.remove('selected');
+        btn.style.animation = 'none';
+        btn.offsetHeight; // 리플로우 트리거
+        btn.style.animation = null;
+    });
+}
+
+// 답변 선택
+function selectAnswer(option) {
+    const question = shuffledQuestions[currentQuestion];
+    const selectedOption = option === 'A' ? question.optionA : question.optionB;
+
+    // 점수 추가
+    const axis = question.axis;
+    scores[axis][selectedOption.value]++;
+
+    // 선택 애니메이션
+    const selectedBtn = document.getElementById(`option-${option.toLowerCase()}`);
+    selectedBtn.classList.add('selected');
+
+    // 다음 질문 또는 결과
+    setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < shuffledQuestions.length) {
+            displayQuestion();
+        } else {
+            showResult();
+        }
+    }, 300);
+}
+
+// 결과 계산 및 표시
+function showResult() {
+    // 각 축의 결과 계산
+    const sd = scores.SD.S >= scores.SD.D ? 'S' : 'D';
+    const ca = scores.CA.C >= scores.CA.A ? 'C' : 'A';
+    const ge = scores.GE.G >= scores.GE.E ? 'G' : 'E';
+
+    const typeCode = sd + ca + ge;
+    const result = resultData[typeCode];
+
+    // URL 해시 업데이트 (공유용)
+    window.location.hash = typeCode;
+
+    // 결과 페이지 표시
+    document.getElementById('result-name').textContent = result.name;
+    document.getElementById('result-description').textContent = result.description;
+    document.getElementById('result-examples').textContent = result.examples;
+
+    // 캐릭터 이미지 표시
+    const resultImage = document.getElementById('result-image');
+    resultImage.innerHTML = `
+        <div class="result-images">
+            <img src="${result.characterImage}" alt="${result.name} 캐릭터" class="character-image">
+        </div>
+    `;
+
+    // 축 분석 표시
+    const axisBreakdown = document.getElementById('axis-breakdown');
+    axisBreakdown.innerHTML = `
+        <div class="axis-item">
+            <span class="axis-label">${axisDescriptions[sd].name}</span>
+            <span class="axis-desc">${axisDescriptions[sd].description}</span>
+        </div>
+        <div class="axis-item">
+            <span class="axis-label">${axisDescriptions[ca].name}</span>
+            <span class="axis-desc">${axisDescriptions[ca].description}</span>
+        </div>
+        <div class="axis-item">
+            <span class="axis-label">${axisDescriptions[ge].name}</span>
+            <span class="axis-desc">${axisDescriptions[ge].description}</span>
+        </div>
+    `;
+
+    // 특성 태그
+    const traitsHtml = result.traits.map(trait =>
+        `<span class="trait-tag" style="background: ${result.color}22; color: ${result.color}">${trait}</span>`
+    ).join('');
+
+    // 결과 페이지에 색상 테마 적용
+    document.documentElement.style.setProperty('--result-color', result.color);
+
+    showPage('result-page');
+}
+
+// 테스트 다시 시작
+function restartTest() {
+    window.location.hash = '';
+    startTest();
+}
+
+// 결과 공유
+function shareResult() {
+    const typeCode = window.location.hash.slice(1);
+    const result = resultData[typeCode];
+    const shareText = `나의 취미 유형은 "${result.name}"!\n${result.description}\n\n당신의 취미 유형은 무엇인가요?`;
+    const shareUrl = window.location.href;
+
+    if (navigator.share) {
+        navigator.share({
+            title: 'Brand:I 취미 성향 테스트 결과',
+            text: shareText,
+            url: shareUrl
+        }).catch(console.error);
+    } else {
+        // 클립보드에 복사
+        const copyText = `${shareText}\n\n테스트 하러가기: ${shareUrl}`;
+        navigator.clipboard.writeText(copyText).then(() => {
+            showToast('링크가 복사되었습니다! 친구에게 공유해보세요.');
+        }).catch(() => {
+            // 폴백: 텍스트 선택
+            prompt('아래 링크를 복사하세요:', shareUrl);
+        });
+    }
+}
+
+// 토스트 메시지 표시
+function showToast(message) {
+    // 기존 토스트 제거
+    const existingToast = document.querySelector('.toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+
+    // 새 토스트 생성
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    // 애니메이션 후 제거
+    setTimeout(() => {
+        toast.classList.add('fade-out');
+        setTimeout(() => toast.remove(), 300);
+    }, 2500);
+}
+
+// URL 해시로 결과 페이지 직접 접근
+function checkDirectAccess() {
+    const hash = window.location.hash.slice(1);
+    if (hash && resultData[hash]) {
+        // 직접 접근한 경우 점수 시뮬레이션
+        scores.SD[hash[0]] = 3;
+        scores.CA[hash[1]] = 3;
+        scores.GE[hash[2]] = 3;
+        shuffledQuestions = questions; // 셔플 없이 원본 사용
+        currentQuestion = questions.length;
+        showResult();
+    }
+}
+
+// 페이지 로드 시 초기화
+document.addEventListener('DOMContentLoaded', () => {
+    checkDirectAccess();
+});
+
+// 해시 변경 감지
+window.addEventListener('hashchange', () => {
+    const hash = window.location.hash.slice(1);
+    if (!hash) {
+        showPage('welcome-page');
+    } else if (resultData[hash]) {
+        scores.SD[hash[0]] = 3;
+        scores.CA[hash[1]] = 3;
+        scores.GE[hash[2]] = 3;
+        shuffledQuestions = questions;
+        currentQuestion = questions.length;
+        showResult();
+    }
+});

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="나의 취미 유형을 알아보는 HBTI 테스트 - Brand:I">
+    <meta property="og:title" content="HBTI 취미유형 테스트 | Brand:I">
+    <meta property="og:description" content="9가지 질문으로 알아보는 나의 취미 성향! 당신은 어떤 유형인가요?">
+    <meta property="og:image" content="og-image.png">
+    <meta property="og:type" content="website">
+    <title>HBTI 취미유형 테스트 | Brand:I</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Welcome Page -->
+        <div id="welcome-page" class="page active">
+            <div class="welcome-content">
+                <div class="logo">
+                    <img src="logo_in_app.png" alt="Brand:I" class="logo-image">
+                </div>
+                <h1 class="title">취미 성향 테스트!</h1>
+                <p class="description">
+                    9가지 질문으로 알아보는<br>
+                    나만의 취미 성향 분석
+                </p>
+                <div class="type-preview">
+                    <span class="type-badge">연금술사</span>
+                    <span class="type-badge">과몰입러</span>
+                    <span class="type-badge">덕질러</span>
+                    <span class="type-badge">성장러</span>
+                    <span class="type-badge">에너자이저</span>
+                    <span class="type-badge">인싸</span>
+                    <span class="type-badge">갓생러</span>
+                    <span class="type-badge">행동가</span>
+                </div>
+                <button class="btn-primary" onclick="startTest()">테스트 시작하기</button>
+                <p class="time-info">소요시간 약 2분</p>
+            </div>
+        </div>
+
+        <!-- Question Page -->
+        <div id="question-page" class="page">
+            <div class="question-content">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <p class="question-number" id="question-number">Q1</p>
+                <h2 class="question-text" id="question-text"></h2>
+                <div class="options">
+                    <button class="option-btn" id="option-a" onclick="selectAnswer('A')">
+                        <span class="option-text" id="option-a-text"></span>
+                    </button>
+                    <button class="option-btn" id="option-b" onclick="selectAnswer('B')">
+                        <span class="option-text" id="option-b-text"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Page -->
+        <div id="result-page" class="page">
+            <div class="result-content">
+                <p class="result-label">당신은 바로</p>
+                <div class="result-type">
+                    <h1 class="result-name" id="result-name"></h1>
+                </div>
+                <div class="result-image" id="result-image">
+                    <div class="type-icon" id="type-icon"></div>
+                </div>
+                <p class="result-description" id="result-description"></p>
+                <div class="result-examples">
+                    <p class="examples-label">이런 취미가 잘 맞아요</p>
+                    <p class="examples-text" id="result-examples"></p>
+                </div>
+                <div class="axis-breakdown" id="axis-breakdown"></div>
+                <div class="cta-section">
+                    <p class="cta-text">취미를 성장시키고 나를 브랜딩해보세요!</p>
+                    <a href="https://apps.apple.com/app/brandi" class="btn-primary btn-download" target="_blank">
+                        Brand:I 앱 다운로드
+                    </a>
+                    <button class="btn-share" onclick="shareResult()">결과 공유하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
