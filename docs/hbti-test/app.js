@@ -176,27 +176,13 @@ function restartTest() {
 
 // 결과 공유
 function shareResult() {
-    const typeCode = window.location.hash.slice(1);
-    const result = resultData[typeCode];
-    const shareText = `나의 취미 유형은 "${result.name}"!\n${result.description}\n\n당신의 취미 유형은 무엇인가요?`;
     const shareUrl = window.location.href;
 
-    if (navigator.share) {
-        navigator.share({
-            title: 'Brand:I 취미 성향 테스트 결과',
-            text: shareText,
-            url: shareUrl
-        }).catch(console.error);
-    } else {
-        // 클립보드에 복사
-        const copyText = `${shareText}\n\n테스트 하러가기: ${shareUrl}`;
-        navigator.clipboard.writeText(copyText).then(() => {
-            showToast('링크가 복사되었습니다! 친구에게 공유해보세요.');
-        }).catch(() => {
-            // 폴백: 텍스트 선택
-            prompt('아래 링크를 복사하세요:', shareUrl);
-        });
-    }
+    navigator.clipboard.writeText(shareUrl).then(() => {
+        showToast('링크가 복사되었습니다!');
+    }).catch(() => {
+        prompt('아래 링크를 복사하세요:', shareUrl);
+    });
 }
 
 // 토스트 메시지 표시
