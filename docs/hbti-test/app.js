@@ -66,10 +66,13 @@ function startTest() {
 function displayQuestion() {
     const question = shuffledQuestions[currentQuestion];
 
-    // 선택 상태 먼저 초기화
+    // 선택 상태 및 포커스 초기화
     const optionBtns = document.querySelectorAll('.option-btn');
     optionBtns.forEach(btn => {
         btn.classList.remove('selected');
+        btn.blur(); // 포커스 해제
+        btn.style.background = ''; // 인라인 스타일 초기화
+        btn.style.borderColor = ''; // 테두리 색상 초기화
     });
 
     // 진행률 업데이트
@@ -174,20 +177,21 @@ function shareResult() {
     const typeCode = window.location.hash.slice(1);
     const result = resultData[typeCode];
     const shareText = `나의 취미 유형은 "${result.name}"!\n${result.description}\n\n당신의 취미 유형은 무엇인가요?`;
-    const shareUrl = window.location.href;
+    // 테스트 URL은 해시 없이 (다른 사람이 테스트할 수 있도록)
+    const testUrl = window.location.href.split('#')[0];
 
     if (navigator.share) {
         navigator.share({
             title: 'Brand:I 취미 성향 테스트 결과',
             text: shareText,
-            url: shareUrl
+            url: testUrl
         }).catch(console.error);
     } else {
-        const copyText = `${shareText}\n\n테스트 하러가기: ${shareUrl}`;
+        const copyText = `${shareText}\n\n테스트 하러가기: ${testUrl}`;
         navigator.clipboard.writeText(copyText).then(() => {
             showToast('링크가 복사되었습니다! 친구에게 공유해보세요.');
         }).catch(() => {
-            prompt('아래 링크를 복사하세요:', shareUrl);
+            prompt('아래 링크를 복사하세요:', testUrl);
         });
     }
 }
