@@ -76,24 +76,17 @@ function displayQuestion() {
     // 질문 텍스트
     document.getElementById('question-text').textContent = question.text;
 
-    // 옵션 텍스트
-    document.getElementById('option-a-text').textContent = question.optionA.text;
-    document.getElementById('option-b-text').textContent = question.optionB.text;
-
-    // 모바일 터치 상태 완전 초기화 - 버튼 요소 교체
+    // 옵션 버튼들 초기화 및 텍스트 설정
     const optionA = document.getElementById('option-a');
     const optionB = document.getElementById('option-b');
 
-    // 클론으로 교체하여 모든 이벤트 상태 초기화
-    const newOptionA = optionA.cloneNode(true);
-    const newOptionB = optionB.cloneNode(true);
+    // 선택 상태 초기화
+    optionA.classList.remove('selected');
+    optionB.classList.remove('selected');
 
-    optionA.parentNode.replaceChild(newOptionA, optionA);
-    optionB.parentNode.replaceChild(newOptionB, optionB);
-
-    // 새 버튼에 클릭 이벤트 다시 연결
-    newOptionA.onclick = () => selectAnswer('A');
-    newOptionB.onclick = () => selectAnswer('B');
+    // 옵션 텍스트
+    document.getElementById('option-a-text').textContent = question.optionA.text;
+    document.getElementById('option-b-text').textContent = question.optionB.text;
 }
 
 // 답변 선택
@@ -105,19 +98,13 @@ function selectAnswer(option) {
     const axis = question.axis;
     scores[axis][selectedOption.value]++;
 
-    // 선택 애니메이션
-    const selectedBtn = document.getElementById(`option-${option.toLowerCase()}`);
-    selectedBtn.classList.add('selected');
-
-    // 다음 질문 또는 결과
-    setTimeout(() => {
-        currentQuestion++;
-        if (currentQuestion < shuffledQuestions.length) {
-            displayQuestion();
-        } else {
-            showResult();
-        }
-    }, 300);
+    // 바로 다음 질문으로 넘어감 (선택 표시 없음)
+    currentQuestion++;
+    if (currentQuestion < shuffledQuestions.length) {
+        displayQuestion();
+    } else {
+        showResult();
+    }
 }
 
 // 결과 계산 및 표시
