@@ -179,8 +179,8 @@ body::before {
 
 .logo-image {
     height: auto;
-    width: 85%;
-    max-width: 85%;
+    width: 70%;
+    max-width: 70%;
     object-fit: contain;
     border: none;
     filter: drop-shadow(0 4px 20px rgba(99, 102, 241, 0.2));
@@ -263,13 +263,13 @@ body::before {
 
 .orbit-char {
     position: absolute;
-    width: 80px;
-    height: 80px;
+    width: 88px;
+    height: 88px;
     /* 중심으로부터 배치를 위한 기준점 설정 */
     left: 50%;
     top: 50%;
-    margin-left: -40px;
-    margin-top: -40px;
+    margin-left: -44px;
+    margin-top: -44px;
 }
 
 .orbit-char img {
