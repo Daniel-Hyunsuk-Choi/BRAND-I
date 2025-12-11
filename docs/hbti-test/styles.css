@@ -892,21 +892,42 @@ body::before {
 }
 
 .cta-section {
-    margin-top: 16px;
+    margin-top: 24px;
     padding-top: 20px;
     border-top: 1px solid rgba(99, 102, 241, 0.15);
 }
 
-.cta-text {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 20px;
-}
-
 .btn-download {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
     margin-bottom: 14px;
 }
+
+.btn-download-icon {
+    font-size: 40px;
+}
+
+.btn-download-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.btn-download-main {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.btn-download-sub {
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.85;
+    margin-top: 2px;
+}
+
 
 .btn-secondary {
     display: block;
