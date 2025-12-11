@@ -66,15 +66,6 @@ function startTest() {
 function displayQuestion() {
     const question = shuffledQuestions[currentQuestion];
 
-    // 선택 상태 및 포커스 초기화
-    const optionBtns = document.querySelectorAll('.option-btn');
-    optionBtns.forEach(btn => {
-        btn.classList.remove('selected');
-        btn.blur(); // 포커스 해제
-        btn.style.background = ''; // 인라인 스타일 초기화
-        btn.style.borderColor = ''; // 테두리 색상 초기화
-    });
-
     // 진행률 업데이트
     const progress = ((currentQuestion) / shuffledQuestions.length) * 100;
     document.getElementById('progress-fill').style.width = `${progress}%`;
@@ -88,6 +79,21 @@ function displayQuestion() {
     // 옵션 텍스트
     document.getElementById('option-a-text').textContent = question.optionA.text;
     document.getElementById('option-b-text').textContent = question.optionB.text;
+
+    // 모바일 터치 상태 완전 초기화 - 버튼 요소 교체
+    const optionA = document.getElementById('option-a');
+    const optionB = document.getElementById('option-b');
+
+    // 클론으로 교체하여 모든 이벤트 상태 초기화
+    const newOptionA = optionA.cloneNode(true);
+    const newOptionB = optionB.cloneNode(true);
+
+    optionA.parentNode.replaceChild(newOptionA, optionA);
+    optionB.parentNode.replaceChild(newOptionB, optionB);
+
+    // 새 버튼에 클릭 이벤트 다시 연결
+    newOptionA.onclick = () => selectAnswer('A');
+    newOptionB.onclick = () => selectAnswer('B');
 }
 
 // 답변 선택

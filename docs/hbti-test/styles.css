@@ -562,14 +562,23 @@ body::before {
     transition: opacity 0.3s ease;
 }
 
-.option-btn:hover {
-    border-color: var(--primary-color);
-    transform: translateX(6px);
-    box-shadow: 0 4px 24px rgba(99, 102, 241, 0.15);
+/* 데스크탑에서만 hover 효과 적용 */
+@media (hover: hover) and (pointer: fine) {
+    .option-btn:hover {
+        border-color: var(--primary-color);
+        transform: translateX(6px);
+        box-shadow: 0 4px 24px rgba(99, 102, 241, 0.15);
+    }
+
+    .option-btn:hover::before {
+        opacity: 1;
+    }
 }
 
-.option-btn:hover::before {
-    opacity: 1;
+/* 모바일 터치 시 active 상태 */
+.option-btn:active {
+    border-color: var(--primary-color);
+    transform: scale(0.98);
 }
 
 .option-btn.selected {
