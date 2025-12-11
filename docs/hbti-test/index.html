@@ -17,26 +17,52 @@
         <!-- Welcome Page -->
         <div id="welcome-page" class="page active">
             <div class="welcome-content">
+                <!-- 로고 -->
                 <div class="logo">
                     <img src="logo_in_app.png" alt="Brand:I" class="logo-image">
                 </div>
-                <h1 class="title">취미 성향 테스트!</h1>
-                <p class="description">
-                    9가지 질문으로 알아보는<br>
-                    나만의 취미 성향 분석
-                </p>
-                <div class="type-preview">
-                    <span class="type-badge">연금술사</span>
-                    <span class="type-badge">과몰입러</span>
-                    <span class="type-badge">덕질러</span>
-                    <span class="type-badge">성장러</span>
-                    <span class="type-badge">에너자이저</span>
-                    <span class="type-badge">인싸</span>
-                    <span class="type-badge">갓생러</span>
-                    <span class="type-badge">행동가</span>
+
+                <!-- 타이틀 + 캐릭터 원형 배치 -->
+                <div class="title-with-characters">
+                    <div class="orbit-characters">
+                        <div class="orbit-char orbit-1">
+                            <img src="characters_and_objects/SCE.png" alt="연금술사">
+                        </div>
+                        <div class="orbit-char orbit-2">
+                            <img src="characters_and_objects/DCG.png" alt="갓생러">
+                        </div>
+                        <div class="orbit-char orbit-3">
+                            <img src="characters_and_objects/DAE.png" alt="인싸">
+                        </div>
+                        <div class="orbit-char orbit-4">
+                            <img src="characters_and_objects/SAG.png" alt="과몰입러">
+                        </div>
+                        <div class="orbit-char orbit-5">
+                            <img src="characters_and_objects/DAG.png" alt="에너자이저">
+                        </div>
+                        <div class="orbit-char orbit-6">
+                            <img src="characters_and_objects/SAE.png" alt="덕질러">
+                        </div>
+                        <div class="orbit-char orbit-7">
+                            <img src="characters_and_objects/SCG.png" alt="성장러">
+                        </div>
+                        <div class="orbit-char orbit-8">
+                            <img src="characters_and_objects/DCE.png" alt="행동가">
+                        </div>
+                    </div>
+                    <div class="center-title">
+                        <h1 class="title">취미 성향<br>테스트</h1>
+                        <p class="subtitle-fun">나는 어떤 취미 유형일까?</p>
+                    </div>
                 </div>
-                <button class="btn-primary" onclick="startTest()">테스트 시작하기</button>
-                <p class="time-info">소요시간 약 2분</p>
+
+                <!-- 시작 버튼 -->
+                <div class="start-section">
+                    <button class="btn-primary btn-start" onclick="startTest()">
+                        시작하기
+                    </button>
+                    <p class="time-info">9개 질문 · 약 2분 소요</p>
+                </div>
             </div>
         </div>
 
@@ -62,12 +88,8 @@
         <!-- Result Page -->
         <div id="result-page" class="page">
             <div class="result-content">
-                <p class="result-label">당신은 바로</p>
-                <div class="result-type">
-                    <h1 class="result-name" id="result-name"></h1>
-                </div>
-                <div class="result-image" id="result-image">
-                    <div class="type-icon" id="type-icon"></div>
+                <div class="result-card" id="result-card">
+                    <!-- 카드 내용은 JS에서 동적 생성 -->
                 </div>
                 <p class="result-description" id="result-description"></p>
                 <div class="result-examples">

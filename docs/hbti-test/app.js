@@ -127,18 +127,24 @@ function showResult() {
     // URL 해시 업데이트 (공유용)
     window.location.hash = typeCode;
 
-    // 결과 페이지 표시
-    document.getElementById('result-name').textContent = result.name;
+    // 결과 페이지에 색상 테마 적용
+    document.documentElement.style.setProperty('--result-color', result.color);
+
+    // 결과 카드 생성
+    const resultCard = document.getElementById('result-card');
+    resultCard.innerHTML = `
+        <p class="card-result-label">당신은 바로</p>
+        <div class="character-container">
+            <div class="character-circle">
+                <img src="${result.characterImage}" alt="${result.name}" class="character-image">
+            </div>
+        </div>
+        <div class="card-type-name">${result.name}</div>
+    `;
+
+    // 설명 및 예시
     document.getElementById('result-description').textContent = result.description;
     document.getElementById('result-examples').textContent = result.examples;
-
-    // 캐릭터 이미지 표시
-    const resultImage = document.getElementById('result-image');
-    resultImage.innerHTML = `
-        <div class="result-images">
-            <img src="${result.characterImage}" alt="${result.name} 캐릭터" class="character-image">
-        </div>
-    `;
 
     // 축 분석 표시
     const axisBreakdown = document.getElementById('axis-breakdown');
@@ -157,14 +163,6 @@ function showResult() {
         </div>
     `;
 
-    // 특성 태그
-    const traitsHtml = result.traits.map(trait =>
-        `<span class="trait-tag" style="background: ${result.color}22; color: ${result.color}">${trait}</span>`
-    ).join('');
-
-    // 결과 페이지에 색상 테마 적용
-    document.documentElement.style.setProperty('--result-color', result.color);
-
     showPage('result-page');
 }
 
@@ -176,13 +174,25 @@ function restartTest() {
 
 // 결과 공유
 function shareResult() {
+    const typeCode = window.location.hash.slice(1);
+    const result = resultData[typeCode];
+    const shareText = `나의 취미 유형은 "${result.name}"!\n${result.description}\n\n당신의 취미 유형은 무엇인가요?`;
     const shareUrl = window.location.href;
 
-    navigator.clipboard.writeText(shareUrl).then(() => {
-        showToast('링크가 복사되었습니다!');
-    }).catch(() => {
-        prompt('아래 링크를 복사하세요:', shareUrl);
-    });
+    if (navigator.share) {
+        navigator.share({
+            title: 'Brand:I 취미 성향 테스트 결과',
+            text: shareText,
+            url: shareUrl
+        }).catch(console.error);
+    } else {
+        const copyText = `${shareText}\n\n테스트 하러가기: ${shareUrl}`;
+        navigator.clipboard.writeText(copyText).then(() => {
+            showToast('링크가 복사되었습니다! 친구에게 공유해보세요.');
+        }).catch(() => {
+            prompt('아래 링크를 복사하세요:', shareUrl);
+        });
+    }
 }
 
 // 토스트 메시지 표시
