@@ -66,6 +66,12 @@ function startTest() {
 function displayQuestion() {
     const question = shuffledQuestions[currentQuestion];
 
+    // 선택 상태 먼저 초기화
+    const optionBtns = document.querySelectorAll('.option-btn');
+    optionBtns.forEach(btn => {
+        btn.classList.remove('selected');
+    });
+
     // 진행률 업데이트
     const progress = ((currentQuestion) / shuffledQuestions.length) * 100;
     document.getElementById('progress-fill').style.width = `${progress}%`;
@@ -79,15 +85,6 @@ function displayQuestion() {
     // 옵션 텍스트
     document.getElementById('option-a-text').textContent = question.optionA.text;
     document.getElementById('option-b-text').textContent = question.optionB.text;
-
-    // 애니메이션 리셋
-    const optionBtns = document.querySelectorAll('.option-btn');
-    optionBtns.forEach(btn => {
-        btn.classList.remove('selected');
-        btn.style.animation = 'none';
-        btn.offsetHeight; // 리플로우 트리거
-        btn.style.animation = null;
-    });
 }
 
 // 답변 선택
